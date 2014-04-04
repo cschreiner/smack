@@ -43,7 +43,7 @@
 
 typedef void* spthread_start_routine_t( void *arg_ptr);
 
-typedef enum { _SPTHREAD_STATE_INITIALISED= 0, _SPTHREAD_STATE_RUNNING, 
+typedef enum { _SPTHREAD_STATE_INITIALIZED= 0, _SPTHREAD_STATE_RUNNING, 
       _SPTHREAD_STATE_DONE } 
       _spthread_state_t;
 
@@ -55,7 +55,7 @@ typedef struct {
 /* main control structure for a thread */
 typedef struct {
    _spthread_state_t state;
-   const spthread_attr_t attrs;
+   spthread_attr_t attrs;
    void* ret_val;
    
 } _spthread_ctl_t;
@@ -93,10 +93,14 @@ _spthread_ctl_t _spthread_ctl_array[ _SPTHREAD_MAX_THREADS+ 1 ];
    *
    */
 void _spthread_ftn_wrapper( spthread_t thread, 
-      _spthread_start_routine_t* start_routine_ptr, void* arg_ptr )
+      spthread_start_routine_t* start_routine_ptr, void* arg_ptr )
 {{
-   thread_ptr->ret_val= (*start_routine_ptr)(arg_ptr);
-   thread_ptr->state= _SPTHREAD_STATE_DONE;
+   thread->ret_val= (*start_routine_ptr)(arg_ptr);
+   thread->state= _SPTHREAD_STATE_DONE;
+   /* TODO2: find some way to move unused threads from state
+      _SPTHREAD_STATE_DONE bacvk to _SPTHREAD_STATE_INITIALIZED so the control
+      structure can be reused.
+    */
 }}
 
 
@@ -129,7 +133,7 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
    /* find an unused thread control structure */
    int ii;
    for ( ii= 0; ii < _SPTHREAD_MAX_THREADS; ii++ ) {
-      if ( _spthread_ctl_array[ii]->state= _SPTHREAD_STATE_INITIALIZED ) {
+      if ( _spthread_ctl_array[ii].state= _SPTHREAD_STATE_INITIALIZED ) {
          goto found_ctl_struct;
       }
    }
@@ -138,16 +142,15 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
 
    found_ctl_struct:
 
-   _spthread_ctl_array[ii]->state= _SPTHREAD_STATE_RUNNING;
+   _spthread_ctl_array[ii].state= _SPTHREAD_STATE_RUNNING;
    if ( attr_ptr == NULL ) {
       _spthread_set_attr_to_defaults( &(_spthread_ctl_array[ii]->attrs) );
-      _spthread_ctl_array[ii]->attrs= 
    } else {
-      _spthread_ctl_array[ii]->attrs= *attr_ptr;
+      _spthread_ctl_array[ii].attrs= *attr_ptr;
    }
    *thread_ptr= &_spthread_ctl_array[ii];
    /* TODO: refine the thread start code here */ 
-   __SMACK__CODE( "async" ) spthread_ftn_wrapper( 
+   __SMACK__CODE( "async" ); spthread_ftn_wrapper( 
 	 thread_ptr, start_routine_ptr, arg_ptr ); 
    return 0;
 }}
@@ -175,7 +178,7 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
    */
 int spthread_join( spthread_t thread, void**retval )
 {{
-   while( thread.state != _SPTHREAD_STATE_DONE  ) {
+   while( thread->state != _SPTHREAD_STATE_DONE  ) {
       // do nothing
    }
    *retval= thread->ret_val;
