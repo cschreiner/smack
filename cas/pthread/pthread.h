@@ -1,11 +1,11 @@
 /*** 
-   * Program Name: SMACK pthreads
+   * Program Name: SMACK spthreads
    *
-   * File Name: pthread.h
+   * File Name: spthread.h
    *
    * File Description: 
    *
-   * SMACK pthreads was written by Christian A. Schreiner at University of
+   * SMACK spthreads was written by Christian A. Schreiner at University of
    * Utah.  Copyright (C) 2014-2014 by University of Utah.  All rights
    * reserved.  You may use, examine, or modify this file only in accordance
    * with the GNU Public License, or, alternately, by special written
@@ -24,8 +24,8 @@
    * 
    */
 
-#if !defined(__PTHREAD_H__)
-#define __PTHREAD_H__
+#if !defined(__SPTHREAD_H__)
+#define __SPTHREAD_H__
 
 /*** **************************************************************************
    *   includes
@@ -39,40 +39,40 @@
    * **************************************************************************
    */
 
-#define _PTHREAD_MAX_THREADS (10)
+#define _SPTHREAD_MAX_THREADS (10)
 
-typedef void* pthread_start_routine_t( void *arg_ptr);
+typedef void* spthread_start_routine_t( void *arg_ptr);
 
-typedef enum { _PTHREAD_STATE_INITIALISED= 0, _PTHREAD_STATE_RUNNING, 
-      _PTHREAD_STATE_DONE } 
-      _pthread_state_t;
+typedef enum { _SPTHREAD_STATE_INITIALISED= 0, _SPTHREAD_STATE_RUNNING, 
+      _SPTHREAD_STATE_DONE } 
+      _spthread_state_t;
 
 typedef struct {
    /* give this structure a dummy field until something is needed. */
    char dummy;
-} pthread_attr_t;
+} spthread_attr_t;
 
 /* main control structure for a thread */
 typedef struct {
-   _pthread_state_t state;
-   const pthread_attr_t attrs;
+   _spthread_state_t state;
+   const spthread_attr_t attrs;
    void* ret_val;
    
-} _pthread_ctl_t;
+} _spthread_ctl_t;
 
-typedef _pthread_ctl_t* pthread_t;
+typedef _spthread_ctl_t* spthread_t;
 
-_pthread_ctl_t _pthread_ctl_array[ _PTHREAD_MAX_THREADS+ 1 ];
+_spthread_ctl_t _spthread_ctl_array[ _SPTHREAD_MAX_THREADS+ 1 ];
 
 
 /*** ==========================================================================
    *   function prototypes
    */
 
-#define _pthread_set_attr_to_defaults( aa ) { } /* intentionally nothing */
+#define _spthread_set_attr_to_defaults( aa ) { } /* intentionally nothing */
 
 /*** --------------------------------------------------------------------------
-   * _pthread_ftn_wrapper()
+   * _spthread_ftn_wrapper()
    * --------------------------------------------------------------------------
    * Description: manages the thread's start function, and its return value. 
    *	Runs as part of the started thread, not as part of the calling thread.
@@ -92,16 +92,16 @@ _pthread_ctl_t _pthread_ctl_array[ _PTHREAD_MAX_THREADS+ 1 ];
    * Return Value: void
    *
    */
-void _pthread_ftn_wrapper( pthread_t thread, 
-      _pthread_start_routine_t* start_routine_ptr, void* arg_ptr )
+void _spthread_ftn_wrapper( spthread_t thread, 
+      _spthread_start_routine_t* start_routine_ptr, void* arg_ptr )
 {{
    thread_ptr->ret_val= (*start_routine_ptr)(arg_ptr);
-   thread_ptr->state= _PTHREAD_STATE_DONE;
+   thread_ptr->state= _SPTHREAD_STATE_DONE;
 }}
 
 
 /*** --------------------------------------------------------------------------
-   * pthread_create()
+   * spthread_create()
    * --------------------------------------------------------------------------
    * Description: starts a new thread running
    *
@@ -123,13 +123,13 @@ void _pthread_ftn_wrapper( pthread_t thread,
    * Return Value:
    *
    */
-int pthread_create( pthread_t* thread_ptr, const pthread_attr_t* attr_ptr,
-      pthread_start_routine_t* start_routine_ptr, void* arg_ptr )
+int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
+      spthread_start_routine_t* start_routine_ptr, void* arg_ptr )
 {{
    /* find an unused thread control structure */
    int ii;
-   for ( ii= 0; ii < _PTHREAD_MAX_THREADS; ii++ ) {
-      if ( _pthread_ctl_array[ii]->state= _PTHREAD_STATE_INITIALIZED ) {
+   for ( ii= 0; ii < _SPTHREAD_MAX_THREADS; ii++ ) {
+      if ( _spthread_ctl_array[ii]->state= _SPTHREAD_STATE_INITIALIZED ) {
          goto found_ctl_struct;
       }
    }
@@ -138,23 +138,23 @@ int pthread_create( pthread_t* thread_ptr, const pthread_attr_t* attr_ptr,
 
    found_ctl_struct:
 
-   _pthread_ctl_array[ii]->state= _PTHREAD_STATE_RUNNING;
+   _spthread_ctl_array[ii]->state= _SPTHREAD_STATE_RUNNING;
    if ( attr_ptr == NULL ) {
-      _pthread_set_attr_to_defaults( &(_pthread_ctl_array[ii]->attrs) );
-      _pthread_ctl_array[ii]->attrs= 
+      _spthread_set_attr_to_defaults( &(_spthread_ctl_array[ii]->attrs) );
+      _spthread_ctl_array[ii]->attrs= 
    } else {
-      _pthread_ctl_array[ii]->attrs= *attr_ptr;
+      _spthread_ctl_array[ii]->attrs= *attr_ptr;
    }
-   *thread_ptr= &_pthread_ctl_array[ii];
+   *thread_ptr= &_spthread_ctl_array[ii];
    /* TODO: refine the thread start code here */ 
-   __SMACK__CODE( "async" ) pthread_ftn_wrapper( 
+   __SMACK__CODE( "async" ) spthread_ftn_wrapper( 
 	 thread_ptr, start_routine_ptr, arg_ptr ); 
    return 0;
 }}
 
 
 /*** --------------------------------------------------------------------------
-   * pthread_join()
+   * spthread_join()
    * --------------------------------------------------------------------------
    * Description: waits for the given thread to finish, then returns to resume 
    *	execution of the calling thread.
@@ -173,9 +173,9 @@ int pthread_create( pthread_t* thread_ptr, const pthread_attr_t* attr_ptr,
    * Return Value: 0 for success, or one of EDEADLK, EINVAL, ESRCH.
    *
    */
-int pthread_join( pthread_t thread, void**retval )
+int spthread_join( spthread_t thread, void**retval )
 {{
-   while( thread.state != _PTHREAD_STATE_DONE  ) {
+   while( thread.state != _SPTHREAD_STATE_DONE  ) {
       // do nothing
    }
    *retval= thread->ret_val;
@@ -206,5 +206,5 @@ int pthread_join( pthread_t thread, void**retval )
    *   end of file
    * **************************************************************************
    */
-#endif /* !defined(__PTHREAD_H__) */
+#endif /* !defined(__SPTHREAD_H__) */
 
