@@ -1,25 +1,20 @@
 var x: int;
 
-procedure foo1();
+procedure foo1()
    modifies x;
-
-implementation foo1()
 {
    x:= 1;
 }
 
-procedure foo2();
+procedure foo2()
    modifies x;
-
-implementation foo2()
 {
    x:= 2;
 }
 
 
-procedure { :public } main();
+procedure { :public } main()
    modifies x;
-implementation main()
 {
    x:= 0;
    call /*async*/ foo1();
