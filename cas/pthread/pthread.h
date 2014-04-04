@@ -17,10 +17,10 @@
 
 /*** Configuration Management Information:
    * 
-   * $Source: /home/cas/templates/auto_uut/RCS/cas_tmpl.h,v $
-   * $Author: cas $
-   * $Date: 2014/04/04 10:34:34 $
-   * $Revision: 1.3 $
+   * $Source: $
+   * $Author: $
+   * $Date: $
+   * $Revision: $
    * 
    */
 
