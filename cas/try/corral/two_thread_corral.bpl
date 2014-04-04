@@ -13,12 +13,12 @@ procedure foo2()
 }
 
 
-procedure { :public } main()
+procedure { :public } {:entrypoint } main()
    modifies x;
 {
    x:= 0;
-   call /*async*/ foo1();
-   call /*async*/ foo2();
+   async call foo1();
+   async call foo2();
    assert x== 2;
 }
 
