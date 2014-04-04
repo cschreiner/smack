@@ -1,20 +1,20 @@
-int x;
+var int: x;
 
-void foo1()
-   modifies x
+procedure foo1();
+   modifies x;
 {
    x:= 1;
 }
 
-void foo2()
-   modifies x
+procedure foo2();
+   modifies x;
 {
    x:= 2;
 }
 
 
-void main { entrypoint } main()
-   modifies x
+procedure { :public } main();
+   modifies x;
 {
    x:= 0;
    async foo1();
