@@ -1,0 +1,21 @@
+Christian's notes on corral:
+
+Akash Lal on corral's multithreaded features:
+
+> Corral follows a multi-threaded mode of concurrency with shared memory. The=
+>  way to spawn a thread is:
+> 
+> async call foo(args);
+> 
+> All global variables are assumed to be shared among threads. Besides this, =
+> the only primitive you get is for atomic blocks. This can be done by calls =
+> to the following procedures:
+> 
+> procedure corral_atomic_begin();
+> procedure corral_atomic_end();
+> 
+> Assertions are not allowed to occur in atomic blocks, and atomic blocks can=
+> not nest. Look at the examples in corral\test\regression\003
+ 
+(end of document)
+
