@@ -185,6 +185,80 @@ int spthread_join( spthread_t thread, void**retval )
    return 0;
 }}
 
+typedef enum { _PTHREAD_MUTEX_LOCKED, _PTHREAD_MUTEX_UNLOCKED } 
+      _pthread_mutex_val_t;
+typedef struct {
+   _pthread_mutex_val_t lock;
+} pthread_mutex_t;
+
+
+/*** --------------------------------------------------------------------------
+   * spthread_mutex_lock()
+   * spthread_mutex_unlock()
+   * --------------------------------------------------------------------------
+   * Description:
+   *
+   * Method: uses these Corral functions: 
+   *	procedure corral_atomic_begin();
+   *	procedure corral_atomic_end();
+   *
+   * Reentrancy:
+   *
+   * Inputs:
+   * 
+   * Outputs:
+   *
+   * Return Value:
+   *
+   * TODO: fill these functions out better
+   */
+int spthread_mutex_lock( pthread_mutex_t* mutex_ptr )
+{{
+   try_lock_again:
+
+   __SMACK_CODE( "call corral_atomic_begin();" );
+   int retval= 0;
+
+   switch ( mutex_ptr->lock ) {
+      case _PTHREAD_MUTEX_LOCKED:
+         /* wait for mutex to become unlocked */
+	 __SMACK_CODE( "call corral_atomic_end();" );
+         while( mutex_ptr->lock == _PTHREAD_MUTEX_LOCKED ) {
+            /* intentionally nothing */
+	 }
+         goto try_lock_again;
+         break;
+      case _PTHREAD_MUTEX_UNLOCKED:
+         mutex_ptr->lock= _PTHREAD_MUTEX_LOCKED;
+         retval= 0;
+         break;
+      default:
+         /* something is wrong */
+         retval= EINVAL;
+         break;
+   }
+    
+   __SMACK_CODE( "call corral_atomic_end();" );
+   return retval;
+}}
+
+/*** --------------------------------------------------------------------------
+   * name()
+   * --------------------------------------------------------------------------
+   * Description:
+   *
+   * Method:
+   *
+   * Reentrancy:
+   *
+   * Inputs:
+   * 
+   * Outputs:
+   *
+   * Return Value:
+   *
+   */
+
 
 // template is 17 lines long.
 /*** --------------------------------------------------------------------------
