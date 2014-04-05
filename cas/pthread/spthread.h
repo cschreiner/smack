@@ -194,7 +194,6 @@ typedef struct {
 
 /*** --------------------------------------------------------------------------
    * spthread_mutex_lock()
-   * spthread_mutex_unlock()
    * --------------------------------------------------------------------------
    * Description:
    *
@@ -243,7 +242,7 @@ int spthread_mutex_lock( pthread_mutex_t* mutex_ptr )
 }}
 
 /*** --------------------------------------------------------------------------
-   * name()
+   * spthread_mutex_unlock()
    * --------------------------------------------------------------------------
    * Description:
    *
@@ -257,7 +256,17 @@ int spthread_mutex_lock( pthread_mutex_t* mutex_ptr )
    *
    * Return Value:
    *
+   * TODO: fill these functions out better
    */
+int spthread_mutex_unlock( pthread_mutex_t* mutex_ptr )
+{{
+   if ( mutex_ptr->lock == _PTHREAD_MUTEX_LOCKED ) {
+      mutex_ptr->lock= _PTHREAD_MUTEX_UNLOCKED;
+      return 0;
+   }
+   return EINVAL;
+}}
+
 
 
 // template is 17 lines long.
