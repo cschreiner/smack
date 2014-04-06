@@ -16,6 +16,11 @@ Akash Lal on corral's multithreaded features:
 > 
 > Assertions are not allowed to occur in atomic blocks, and atomic blocks can=
 > not nest. Look at the examples in corral\test\regression\003
+
+But Zvonimir calls like this: call {:ASYNC} foo(args);
+Why the difference?  Is Akash misremembering, or is there a subtle difference,
+or what?
+TODO: ask ZR about this.
  
 (end of document)
 
