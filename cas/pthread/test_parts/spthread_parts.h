@@ -64,11 +64,6 @@ typedef _spthread_ctl_t* spthread_t;
 
 _spthread_ctl_t _spthread_ctl_array[ _SPTHREAD_MAX_THREADS+ 1 ];
 
-typedef enum { _PTHREAD_MUTEX_LOCKED, _PTHREAD_MUTEX_UNLOCKED } 
-      _spthread_mutex_val_t;
-typedef struct {
-   _spthread_mutex_val_t lock;
-} spthread_mutex_t;
 
 
 /*** ==========================================================================
@@ -160,114 +155,6 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
 	 "thread_ptr, start_routine_ptr, arg_ptr );" ); 
    return 0;
 }}
-
-
-/*** --------------------------------------------------------------------------
-   * spthread_join()
-   * --------------------------------------------------------------------------
-   * Description: waits for the given thread to finish, then returns to resume 
-   *	execution of the calling thread.
-   *
-   * Method:
-   *
-   * Reentrancy:
-   *
-   * Inputs:
-   *   thread: the id of the thread to join
-   *   **retval: pointer to where to write the return value, which is itself 
-   *		a pointer to void.
-   * 
-   * Outputs:
-   *
-   * Return Value: 0 for success, or one of EDEADLK, EINVAL, ESRCH.
-   *
-   */
-int spthread_join( spthread_t thread, void**retval )
-{{
-   while( thread->state != _SPTHREAD_STATE_DONE  ) {
-      // do nothing
-   }
-   *retval= thread->ret_val;
-   return 0;
-}}
-
-
-/*** --------------------------------------------------------------------------
-   * spthread_mutex_lock()
-   * --------------------------------------------------------------------------
-   * Description:
-   *
-   * Method: uses these Corral functions: 
-   *	procedure corral_atomic_begin();
-   *	procedure corral_atomic_end();
-   *
-   * Reentrancy:
-   *
-   * Inputs:
-   * 
-   * Outputs:
-   *
-   * Return Value:
-   *
-   * TODO: fill these functions out better
-   */
-int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
-{{
-   try_lock_again:
-
-   __SMACK_code( "call corral_atomic_begin();" );
-   int retval= 0;
-
-   switch ( mutex_ptr->lock ) {
-      case _PTHREAD_MUTEX_LOCKED:
-         /* wait for mutex to become unlocked */
-	 __SMACK_code( "call corral_atomic_end();" );
-         while( mutex_ptr->lock == _PTHREAD_MUTEX_LOCKED ) {
-            /* intentionally nothing */
-	 }
-         goto try_lock_again;
-         break;
-      case _PTHREAD_MUTEX_UNLOCKED:
-         mutex_ptr->lock= _PTHREAD_MUTEX_LOCKED;
-         retval= 0;
-         break;
-      default:
-         /* something is wrong */
-         retval= EINVAL;
-         break;
-   }
-    
-   __SMACK_code( "call corral_atomic_end();" );
-   return retval;
-}}
-
-/*** --------------------------------------------------------------------------
-   * spthread_mutex_unlock()
-   * --------------------------------------------------------------------------
-   * Description:
-   *
-   * Method:
-   *
-   * Reentrancy:
-   *
-   * Inputs:
-   * 
-   * Outputs:
-   *
-   * Return Value:
-   *
-   * TODO: fill these functions out better
-   */
-int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
-{{
-   if ( mutex_ptr->lock == _PTHREAD_MUTEX_LOCKED ) {
-      mutex_ptr->lock= _PTHREAD_MUTEX_UNLOCKED;
-      return 0;
-   }
-   return EINVAL;
-}}
-
-
 
 // template is 17 lines long.
 /*** --------------------------------------------------------------------------
