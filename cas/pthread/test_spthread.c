@@ -22,8 +22,8 @@ void pthread_create(void *(*proc)(void*), void *arg) {
 }
 
 int main() {
-  pthread_create(my_procedure, 0);
-  pthread_create(another,0);
+  spthread_create(my_procedure, 0);
+  spthread_create(another,0);
   return 0;
 }
 
