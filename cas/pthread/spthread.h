@@ -64,6 +64,12 @@ typedef _spthread_ctl_t* spthread_t;
 
 _spthread_ctl_t _spthread_ctl_array[ _SPTHREAD_MAX_THREADS+ 1 ];
 
+typedef enum { _PTHREAD_MUTEX_LOCKED, _PTHREAD_MUTEX_UNLOCKED } 
+      _spthread_mutex_val_t;
+typedef struct {
+   _spthread_mutex_val_t lock;
+} spthread_mutex_t;
+
 
 /*** ==========================================================================
    *   function prototypes
@@ -133,7 +139,7 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
    /* find an unused thread control structure */
    int ii;
    for ( ii= 0; ii < _SPTHREAD_MAX_THREADS; ii++ ) {
-      if ( _spthread_ctl_array[ii].state= _SPTHREAD_STATE_INITIALIZED ) {
+      if ( _spthread_ctl_array[ii].state== _SPTHREAD_STATE_INITIALIZED ) {
          goto found_ctl_struct;
       }
    }
@@ -150,8 +156,8 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
    }
    *thread_ptr= &_spthread_ctl_array[ii];
    /* TODO: refine the thread start code here */ 
-   __SMACK__CODE( "async" ); spthread_ftn_wrapper( 
-	 thread_ptr, start_routine_ptr, arg_ptr ); 
+   __SMACK_code( "call {:async} spthread_ftn_wrapper( " 
+	 "thread_ptr, start_routine_ptr, arg_ptr );" ); 
    return 0;
 }}
 
@@ -185,12 +191,6 @@ int spthread_join( spthread_t thread, void**retval )
    return 0;
 }}
 
-typedef enum { _PTHREAD_MUTEX_LOCKED, _PTHREAD_MUTEX_UNLOCKED } 
-      _pthread_mutex_val_t;
-typedef struct {
-   _pthread_mutex_val_t lock;
-} pthread_mutex_t;
-
 
 /*** --------------------------------------------------------------------------
    * spthread_mutex_lock()
@@ -211,17 +211,17 @@ typedef struct {
    *
    * TODO: fill these functions out better
    */
-int spthread_mutex_lock( pthread_mutex_t* mutex_ptr )
+int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 {{
    try_lock_again:
 
-   __SMACK_CODE( "call corral_atomic_begin();" );
+   __SMACK_code( "call corral_atomic_begin();" );
    int retval= 0;
 
    switch ( mutex_ptr->lock ) {
       case _PTHREAD_MUTEX_LOCKED:
          /* wait for mutex to become unlocked */
-	 __SMACK_CODE( "call corral_atomic_end();" );
+	 __SMACK_code( "call corral_atomic_end();" );
          while( mutex_ptr->lock == _PTHREAD_MUTEX_LOCKED ) {
             /* intentionally nothing */
 	 }
@@ -237,7 +237,7 @@ int spthread_mutex_lock( pthread_mutex_t* mutex_ptr )
          break;
    }
     
-   __SMACK_CODE( "call corral_atomic_end();" );
+   __SMACK_code( "call corral_atomic_end();" );
    return retval;
 }}
 
@@ -258,7 +258,7 @@ int spthread_mutex_lock( pthread_mutex_t* mutex_ptr )
    *
    * TODO: fill these functions out better
    */
-int spthread_mutex_unlock( pthread_mutex_t* mutex_ptr )
+int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
 {{
    if ( mutex_ptr->lock == _PTHREAD_MUTEX_LOCKED ) {
       mutex_ptr->lock= _PTHREAD_MUTEX_UNLOCKED;
