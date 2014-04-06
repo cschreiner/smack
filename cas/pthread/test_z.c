@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include <smack.h>
+#include "/uusoc/scratch/euler/cas/tuut/x86_64/x86_64/smack-project/smack/install/include/smack.h"
 
 int x = 1;
 
