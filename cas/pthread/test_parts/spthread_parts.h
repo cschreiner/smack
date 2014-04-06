@@ -151,7 +151,7 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
    }
    *thread_ptr= &_spthread_ctl_array[ii];
    /* TODO: refine the thread start code here */ 
-   __SMACK_code( "call {:ASYNC} spthread_ftn_wrapper( " 
+   __SMACK_code( "call {:ASYNC} _spthread_ftn_wrapper( " 
    	 "thread_ptr, start_routine_ptr, arg_ptr );" ); 
    return 0;
 }}
