@@ -1,9 +1,34 @@
 CAS notes on using and developing smack
 
-[ ] smack-verify.py can't find the smack.h file when loaded with #include
-<smack.h>.  Either something is wrong with my installation, or it would be
-good to add a feature to smack so that when it invokes clang, it automatically
-adds the smack include dir via -I.
+[ ] Each file using smack assertions and other features must include smack.h.
+Currently the whole directory to this file is required, like this:
+#include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h"
+
+[ ] What does smack-verify.py's message "Finished with 0 verified" mean?
+(from "Finished with 0 verified, xx errors").  I infer it does not mean
+nothing was verified at all, or does it mean no assertions were verified?
+TODO: verify this with ZR.
+
+Smack Desired Features
+----------------
+
+[ ] add feature that when smack invokes clang, it automatically adds the
+appropriate include dir via an -I option so that smack.h can be included as
+#include <smack.h> without additional installation-specific dirs being
+specified.  It would be acceptable if this needed to be #include
+<smack/smack.h> so one -I option could also cover the additional .h files in
+the smack installations include tree.  Changes appear to be necessary in
+bin/smackgen.py (call to subprocess.Popen()).  Note that a similar change has
+already been made in rise4fun/smack_server.py (call to subprocess.call()).
+
+[ ] updated build-linux.sh so it can handle prerequisite systems like corral or
+mono being pre-installed on the system, but still need to have symbolic links
+pointing to them.  Akin to what I have in TUUT.
+
+[ ] foreach .py file in smack/bin, have a symbolic link pointing to it without
+the .py suffix, to save on typing.  For example, a link called foo pointing to
+foo.py.
+
 
 (end of file)
 
