@@ -1,0 +1,9 @@
+CAS notes on using and developing smack
+
+[ ] smack-verify.py can't find the smack.h file when loaded with #include
+<smack.h>.  Either something is wrong with my installation, or it would be
+good to add a feature to smack so that when it invokes clang, it automatically
+adds the smack include dir via -I.
+
+(end of file)
+
