@@ -1,0 +1,78 @@
+Single threaded program detected
+Verifying program while tracking: {assertsPassed}
+Program has a potential bug: False bug
+Verifying program while tracking: {assertsPassed, $M.2}
+Program has a potential bug: True bug
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(11,1): error PF5001: This assertion can fail
+
+Execution trace:
+test_spthread.c(20,1): Trace: Thread=1  
+test_spthread.c(20,1): Trace: Thread=1  (CALL spthread_create)
+./spthread_parts.h(131,1): Trace: Thread=1  
+./spthread_parts.h(132,1): Trace: Thread=1  
+./spthread_parts.h(136,1): Trace: Thread=1  
+./spthread_parts.h(137,1): Trace: Thread=1  
+./spthread_parts.h(138,1): Trace: Thread=1  
+./spthread_parts.h(146,1): Trace: Thread=1  
+./spthread_parts.h(147,1): Trace: Thread=1  
+./spthread_parts.h(150,1): Trace: Thread=1  
+./spthread_parts.h(152,1): Trace: Thread=1  
+./spthread_parts.h(154,1): Trace: Thread=1  
+./spthread_parts.h(154,1): Trace: Thread=1  (CALL _spthread_ftn_wrapper)
+./spthread_parts.h(96,1): Trace: Thread=1  
+./spthread_parts.h(97,1): Trace: Thread=1  
+./spthread_parts.h(99,1): Trace: Thread=1  
+./spthread_parts.h(99,1): Trace: Thread=1  (CALL my_procedure)
+test_spthread.c(9,1): Trace: Thread=1  
+test_spthread.c(10,1): Trace: Thread=1  
+test_spthread.c(11,1): Trace: Thread=1  
+./spthread_parts.h(99,1): Trace: Thread=1  (RETURN from my_procedure )
+./spthread_parts.h(99,1): Trace: Thread=1  
+./spthread_parts.h(100,1): Trace: Thread=1  
+./spthread_parts.h(105,1): Trace: Thread=1  
+./spthread_parts.h(154,1): Trace: Thread=1  (RETURN from _spthread_ftn_wrapper )
+./spthread_parts.h(156,1): Trace: Thread=1  
+./spthread_parts.h(157,1): Trace: Thread=1  
+test_spthread.c(20,1): Trace: Thread=1  (RETURN from spthread_create )
+test_spthread.c(21,1): Trace: Thread=1  
+test_spthread.c(21,1): Trace: Thread=1  (CALL spthread_create)
+./spthread_parts.h(131,1): Trace: Thread=1  
+./spthread_parts.h(132,1): Trace: Thread=1  
+./spthread_parts.h(136,1): Trace: Thread=1  
+./spthread_parts.h(137,1): Trace: Thread=1  
+./spthread_parts.h(140,1): Trace: Thread=1  
+./spthread_parts.h(136,1): Trace: Thread=1  
+./spthread_parts.h(137,1): Trace: Thread=1  
+./spthread_parts.h(138,1): Trace: Thread=1  
+./spthread_parts.h(146,1): Trace: Thread=1  
+./spthread_parts.h(147,1): Trace: Thread=1  
+./spthread_parts.h(150,1): Trace: Thread=1  
+./spthread_parts.h(152,1): Trace: Thread=1  
+./spthread_parts.h(154,1): Trace: Thread=1  
+./spthread_parts.h(154,1): Trace: Thread=1  (CALL _spthread_ftn_wrapper)
+./spthread_parts.h(96,1): Trace: Thread=1  
+./spthread_parts.h(97,1): Trace: Thread=1  
+./spthread_parts.h(99,1): Trace: Thread=1  
+./spthread_parts.h(99,1): Trace: Thread=1  (CALL another)
+test_spthread.c(14,1): Trace: Thread=1  
+test_spthread.c(15,1): Trace: Thread=1  
+test_spthread.c(15,1): Trace: Thread=1  (CALL __SMACK_assert)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(10,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(11,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(11,1): Trace: Thread=1  (ASSERTION FAILS)
+test_spthread.c(15,1): Trace: Thread=1  (RETURN from __SMACK_assert )
+./spthread_parts.h(99,1): Trace: Thread=1  (RETURN from another )
+./spthread_parts.h(154,1): Trace: Thread=1  (RETURN from _spthread_ftn_wrapper )
+test_spthread.c(21,1): Trace: Thread=1  (RETURN from spthread_create )
+test_spthread.c(21,1): Trace: Thread=1  (Done)
+
+Boogie verification time: 0.48 s
+Time spent reading-writing programs: 0.31 s
+
+Time spent checking a program (2): 0.56 s
+Time spent checking a path (4): 0.41 s
+
+Number of procedures inlined: 14
+Number of variables tracked: 2
+Total Time: 1.357497 s
+
