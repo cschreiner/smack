@@ -1,7 +1,10 @@
 #include <stdlib.h>
 #include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h"
+#include "spthread_parts.h"
 
 int x = 1;
+spthread_t my_proc_thread_ctl, another_thread_ctl;
+spthread_attr_t attrs;
 
 void *my_procedure(void *my_argument) {
   x = 0;
@@ -13,17 +16,9 @@ void *another(void *my_argument) {
   return 0;
 }
 
-void call_something(void *(*proc)(void*), void *arg) {
-  proc(arg);
-}
-
-void pthread_create(void *(*proc)(void*), void *arg) {
-  __SMACK_code("call {:ASYNC} call_something(proc,arg);");
-}
-
 int main() {
-  spthread_create(my_procedure, 0);
-  spthread_create(another,0);
-  return 0;
+   spthread_create(&my_proc_thread_ctl, &attrs, my_procedure, 0);
+   spthread_create(&another_thread_ctl, &attrs, another, 0);
+   return 0;
 }
 
