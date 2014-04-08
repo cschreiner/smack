@@ -43,9 +43,10 @@
 
 typedef void* spthread_start_routine_t( void *arg_ptr);
 
-typedef enum { _SPTHREAD_STATE_INITIALIZED= 0, _SPTHREAD_STATE_RUNNING, 
-      _SPTHREAD_STATE_DONE } 
-      _spthread_state_t;
+typedef enum { _SPTHREAD_STATE_FIRST= 0, 
+      _SPTHREAD_STATE_INITIALIZED= 0, _SPTHREAD_STATE_RUNNING, 
+      _SPTHREAD_STATE_DONE,
+      _SPTHREAD_STATE_LAST } _spthread_state_t;
 
 typedef struct {
    /* give this structure a dummy field until something is needed. */
@@ -63,6 +64,9 @@ typedef struct {
 typedef _spthread_ctl_t* spthread_t;
 
 _spthread_ctl_t _spthread_ctl_array[ _SPTHREAD_MAX_THREADS+ 1 ];
+/* TODO: figure out how to initialize this array, or is spthread_create() 
+      sufficient? 
+*/
 
 typedef enum { _PTHREAD_MUTEX_LOCKED, _PTHREAD_MUTEX_UNLOCKED } 
       _spthread_mutex_val_t;
@@ -141,6 +145,7 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
    for ( ii= 0; ii < _SPTHREAD_MAX_THREADS; ii++ ) {
       if ( _spthread_ctl_array[ii].state== _SPTHREAD_STATE_INITIALIZED ) {
          goto found_ctl_struct;
+asdf
       }
    }
    // apparently no control structures are available
