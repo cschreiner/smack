@@ -40,14 +40,10 @@
    */
 #if defined(_SPTHREAD_FAULT_TOLERANT_PROOFS)
    #define _spthread_state_valid_assumption( aa )
-   #define _spthread_mutex_val_valid_assumption( aa )
 #else
    #define _spthread_state_valid_assumption( aa ) \
       _SMACK_assume( "(_SPTHREAD_STATE_FIRST < " #aa ") && (" \
 	    #aa " < _SPTHREAD_STATE_LAST );
-   #define _spthread_mutex_val_valid_assumption( aa )  \
-      _SMACK_assume( "(_SPTHREAD_MUTEX_FIRST < " #aa ") && (" \
-	    #aa " < _SPTHREAD_MUTEX_LAST );
 #endif
 
 #define _SPTHREAD_MAX_THREADS (10)
@@ -82,9 +78,40 @@ _spthread_ctl_t _spthread_ctl_array[ _SPTHREAD_MAX_THREADS+ 1 ];
 /* ..........................................................................
    locking structures
 */
+typedef enum { _SPTHREAD_MUTEX_TYPE_FIRST= 0x6B46, // random val 1...32768
+      _SPTHREAD_MUTEX_TYPE_FAST,
+      _SPTHREAD_MUTEX_TYPE_RECURSIVE,
+      _SPTHREAD_MUTEX_TYPE_ERRORCHECK,
+      _SPTHREAD_MUTEX_TYPE_LAST } _spthread_mutex_type_t;
+#if defined(_SPTHREAD_FAULT_TOLERANT_PROOFS)
+   #define _spthread_mutex_type_valid_assumption(aa) /* intentionally nothing */
+#else
+   #define _spthread_mutex_type_valid_assumption(aa)  \
+      __SMACK_assume( "(_SPTHREAD_MUTEX_TYPE_FIRST < " #aa ") && " \
+	    "(" #aa " < _SPTHREAD_MUTEX_TYPE_LAST )" );
+#endif
+
+typedef struct {
+   /* give this structure a dummy field until something is needed. */
+   _spthread_mutex_type_t type;
+} spthread_mutex_attr_t;
+spthread_mutex_attr_t SPTHREAD_MUTEX_INITIALIZER= { _SPTHREAD_MUTEX_TYPE_FAST };
+spthread_mutex_attr_t SPTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP= 
+      { _SPTHREAD_MUTEX_TYPE_RECURSIVE };
+spthread_mutex_attr_t SPTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP= 
+      { _SPTHREAD_MUTEX_TYPE_ERRORCHECK };
+
 typedef enum { _SPTHREAD_MUTEX_FIRST= -1, _SPTHREAD_MUTEX_UNLOCKED= 0,
       _SPTHREAD_MUTEX_LOCKED, _SPTHREAD_MUTEX_LAST } 
       _spthread_mutex_val_t;
+#if defined(_SPTHREAD_FAULT_TOLERANT_PROOFS)
+   #define _spthread_mutex_lock_valid_assumption(aa) /* intentionally nothing */
+#else
+   #define _spthread_mutex_lock_valid_assumption(aa)  \
+      __SMACK_assume( "(_SPTHREAD_MUTEX_FIRST < " #aa ") && " \
+	    "(" #aa " < _SPTHREAD_MUTEX_LAST )" );
+#endif
+
 typedef struct {
    _spthread_mutex_val_t lock;
 } spthread_mutex_t;
@@ -241,6 +268,33 @@ int spthread_join( spthread_t thread, void**retval )
 
 
 /*** --------------------------------------------------------------------------
+   * spthread_mutex_init()
+   * --------------------------------------------------------------------------
+   * Description: initializes a mutex lock
+   *
+   * Method:
+   *
+   * Reentrancy:
+   *
+   * Inputs:
+   *   mutex_ptr: indicates the lock to initialize
+   *   attr_ptr: a structure of attributes to set
+   * 
+   * Outputs: none
+   *
+   * Return Value: always returns 0
+   *
+   * TODO2: add support for RECURSIVE and ERRORCHECK mutexes. 
+   */
+spthread_mutex_init( spthread_mutex_t* mutex_ptr, 
+      const spthread_mutex_attr_t* attr_ptr )
+{{
+   mutex_ptr->lock= _SPTHREAD_MUTEX_UNLOCKED;
+   return 0;
+}}
+
+
+/*** --------------------------------------------------------------------------
    * spthread_mutex_lock()
    * --------------------------------------------------------------------------
    * Description: gets a mutex lock
@@ -256,13 +310,14 @@ int spthread_join( spthread_t thread, void**retval )
    * 
    * Outputs: none
    *
-   * Return Value: 
+   * Return Value: if success, 0.
+   *   If the lock contents are uninitialized, EINVAL.  
    *
-   * TODO: fill these functions out better
+   * TODO2: add support for RECURSIVE and ERRORCHECK mutexes. 
    */
 int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 {{
-   _spthread_mutex_val_valid_assumption( mutex_ptr->lock );
+   _spthread_mutex_lock_valid_assumption( mutex_ptr->lock );
 
    try_lock_again:
 
@@ -295,23 +350,27 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 /*** --------------------------------------------------------------------------
    * spthread_mutex_unlock()
    * --------------------------------------------------------------------------
-   * Description:
+   * Description: releases a lock so other threads can use the associated 
+   *	resource
    *
    * Method:
    *
    * Reentrancy:
    *
    * Inputs:
+   *   mutex_ptr: indicates the lock structure to use
    * 
-   * Outputs:
+   * Outputs: none
    *
-   * Return Value:
+   * Return Value: if success, 0.
+   *	EINVAL if the lock is already unlocked.
    *
-   * TODO: fill these functions out better
+   *
+   * TODO2: add support for RECURSIVE and ERRORCHECK mutexes. 
    */
 int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
 {{
-   _spthread_mutex_val_valid_assumption( mutex_ptr->lock );
+   _spthread_mutex_lock_valid_assumption( mutex_ptr->lock );
    if ( mutex_ptr->lock == _SPTHREAD_MUTEX_LOCKED ) {
       mutex_ptr->lock= _SPTHREAD_MUTEX_UNLOCKED;
       return 0;
@@ -325,17 +384,17 @@ int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
 /*** --------------------------------------------------------------------------
    * name()
    * --------------------------------------------------------------------------
-   * Description:
+   * Description: 
    *
-   * Method:
+   * Method: 
    *
-   * Reentrancy:
+   * Reentrancy: 
    *
-   * Inputs:
-   * 
-   * Outputs:
-   *
-   * Return Value:
+   * Inputs: 
+   *	 
+   * Outputs: 
+   *	
+   * Return Value: 
    *
    */
 
