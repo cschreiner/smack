@@ -38,13 +38,24 @@
    *   declarations
    * **************************************************************************
    */
+#if defined(_SPTHREAD_FAULT_TOLERANT_PROOFS)
+   #define _spthread_state_valid_assumption( aa )
+   #define _spthread_mutex_val_valid_assumption( aa )
+#else
+   #define _spthread_state_valid_assumption( aa ) \
+      _SMACK_assume( "(_SPTHREAD_STATE_FIRST < " #aa ") && (" \
+	    #aa " < _SPTHREAD_STATE_LAST );
+   #define _spthread_mutex_val_valid_assumption( aa )  \
+      _SMACK_assume( "(_SPTHREAD_MUTEX_FIRST < " #aa ") && (" \
+	    #aa " < _SPTHREAD_MUTEX_LAST );
+#endif
 
 #define _SPTHREAD_MAX_THREADS (10)
 
 typedef void* spthread_start_routine_t( void *arg_ptr);
 
-typedef enum { _SPTHREAD_STATE_FIRST= 0, 
-      _SPTHREAD_STATE_INITIALIZED= 0, _SPTHREAD_STATE_RUNNING, 
+typedef enum { _SPTHREAD_STATE_FIRST= 0x8887, // random num 1...32767
+      _SPTHREAD_STATE_INITIALIZED, _SPTHREAD_STATE_RUNNING, 
       _SPTHREAD_STATE_DONE,
       _SPTHREAD_STATE_LAST } _spthread_state_t;
 
@@ -58,17 +69,21 @@ typedef struct {
    _spthread_state_t state;
    spthread_attr_t attrs;
    void* ret_val;
-   
 } _spthread_ctl_t;
 
 typedef _spthread_ctl_t* spthread_t;
 
 _spthread_ctl_t _spthread_ctl_array[ _SPTHREAD_MAX_THREADS+ 1 ];
-/* TODO: figure out how to initialize this array, or is spthread_create() 
-      sufficient? 
+/* Note: each element in this array should be initialized when
+   pthread_create() initializes it. 
 */
 
-typedef enum { _PTHREAD_MUTEX_LOCKED, _PTHREAD_MUTEX_UNLOCKED } 
+
+/* ..........................................................................
+   locking structures
+*/
+typedef enum { _SPTHREAD_MUTEX_FIRST= -1, _SPTHREAD_MUTEX_UNLOCKED= 0,
+      _SPTHREAD_MUTEX_LOCKED, _SPTHREAD_MUTEX_LAST } 
       _spthread_mutex_val_t;
 typedef struct {
    _spthread_mutex_val_t lock;
@@ -79,6 +94,23 @@ typedef struct {
    *   function prototypes
    */
 
+/*** --------------------------------------------------------------------------
+   * _spthread_set_attr_to_defaults()
+   * --------------------------------------------------------------------------
+   * Description: sets a spthread_attr_t instance to default values
+   *
+   * Method:
+   *
+   * Reentrancy:
+   *
+   * Inputs: none
+   * 
+   * Outputs:
+   *   *aa: the spthread_attr_t structure to set
+   *
+   * Return Value: void
+   *
+   */
 #define _spthread_set_attr_to_defaults( aa ) { } /* intentionally nothing */
 
 /*** --------------------------------------------------------------------------
@@ -108,7 +140,7 @@ void _spthread_ftn_wrapper( spthread_t thread,
    thread->ret_val= (*start_routine_ptr)(arg_ptr);
    thread->state= _SPTHREAD_STATE_DONE;
    /* TODO2: find some way to move unused threads from state
-      _SPTHREAD_STATE_DONE bacvk to _SPTHREAD_STATE_INITIALIZED so the control
+      _SPTHREAD_STATE_DONE back to _SPTHREAD_STATE_INITIALIZED so the control
       structure can be reused.
     */
 }}
@@ -137,21 +169,28 @@ void _spthread_ftn_wrapper( spthread_t thread,
    * Return Value:
    *
    */
+#define _spthread_ctl_arry_bounds_ptr_thm( aa ) \
+      smack_assert( "&_spthread_ctl_arry[0] <= (" #aa ") && " \
+	 "(" #aa ") <= _spthread_ctl_arry[_SPTHRAD_MAX_THREADS] " );
+#define _spthread_ctl_array_bounds_idx_thm( aa )  \
+      smack_assert( "0 <= (" #aa ") && " \
+	 "(" #aa ") <= _SPTHRAD_MAX_THREADS " );
+
 int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
       spthread_start_routine_t* start_routine_ptr, void* arg_ptr )
 {{
    /* find an unused thread control structure */
    int ii;
    for ( ii= 0; ii < _SPTHREAD_MAX_THREADS; ii++ ) {
-      if ( _spthread_ctl_array[ii].state== _SPTHREAD_STATE_INITIALIZED ) {
+      if ( _spthread_ctl_array[ii].state!= _SPTHREAD_STATE_RUNNING ) {
          goto found_ctl_struct;
-asdf
       }
    }
    // apparently no control structures are available
    return EAGAIN;
 
    found_ctl_struct:
+   _SPTHREAD_STATE_VALID_ASSUMPTION( _spthread_ctl_array[ii].state );
 
    _spthread_ctl_array[ii].state= _SPTHREAD_STATE_RUNNING;
    if ( attr_ptr == NULL ) {
@@ -160,9 +199,11 @@ asdf
       _spthread_ctl_array[ii].attrs= *attr_ptr;
    }
    *thread_ptr= &_spthread_ctl_array[ii];
-   /* TODO: refine the thread start code here */ 
+   /* TODO: double check the thread start code here */ 
    __SMACK_code( "call {:ASYNC} _spthread_ftn_wrapper( " 
 	 "thread_ptr, start_routine_ptr, arg_ptr );" ); 
+
+   _spthread_ctl_array_bounds_ptr_thm( thread_ptr );
    return 0;
 }}
 
@@ -189,6 +230,8 @@ asdf
    */
 int spthread_join( spthread_t thread, void**retval )
 {{
+   __SMACK_assert( "thread->state == _SPTHREAD_STATE_RUNNING || " 
+	 "thread->state == _SPTHREAD_STATE_DONE" );
    while( thread->state != _SPTHREAD_STATE_DONE  ) {
       // do nothing
    }
@@ -200,7 +243,7 @@ int spthread_join( spthread_t thread, void**retval )
 /*** --------------------------------------------------------------------------
    * spthread_mutex_lock()
    * --------------------------------------------------------------------------
-   * Description:
+   * Description: gets a mutex lock
    *
    * Method: uses these Corral functions: 
    *	procedure corral_atomic_begin();
@@ -209,31 +252,34 @@ int spthread_join( spthread_t thread, void**retval )
    * Reentrancy:
    *
    * Inputs:
+   *   mutex_ptr: indicates the lock to get
    * 
-   * Outputs:
+   * Outputs: none
    *
-   * Return Value:
+   * Return Value: 
    *
    * TODO: fill these functions out better
    */
 int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 {{
+   _spthread_mutex_val_valid_assumption( mutex_ptr->lock );
+
    try_lock_again:
 
    __SMACK_code( "call corral_atomic_begin();" );
    int retval= 0;
 
    switch ( mutex_ptr->lock ) {
-      case _PTHREAD_MUTEX_LOCKED:
+      case _SPTHREAD_MUTEX_LOCKED:
          /* wait for mutex to become unlocked */
 	 __SMACK_code( "call corral_atomic_end();" );
-         while( mutex_ptr->lock == _PTHREAD_MUTEX_LOCKED ) {
+         while( mutex_ptr->lock == _SPTHREAD_MUTEX_LOCKED ) {
             /* intentionally nothing */
 	 }
          goto try_lock_again;
          break;
-      case _PTHREAD_MUTEX_UNLOCKED:
-         mutex_ptr->lock= _PTHREAD_MUTEX_LOCKED;
+      case _SPTHREAD_MUTEX_UNLOCKED:
+         mutex_ptr->lock= _SPTHREAD_MUTEX_LOCKED;
          retval= 0;
          break;
       default:
@@ -265,8 +311,9 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
    */
 int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
 {{
-   if ( mutex_ptr->lock == _PTHREAD_MUTEX_LOCKED ) {
-      mutex_ptr->lock= _PTHREAD_MUTEX_UNLOCKED;
+   _spthread_mutex_val_valid_assumption( mutex_ptr->lock );
+   if ( mutex_ptr->lock == _SPTHREAD_MUTEX_LOCKED ) {
+      mutex_ptr->lock= _SPTHREAD_MUTEX_UNLOCKED;
       return 0;
    }
    return EINVAL;
