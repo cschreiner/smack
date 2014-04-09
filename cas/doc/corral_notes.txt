@@ -2,25 +2,46 @@ Christian's notes on corral:
 
 Akash Lal on corral's multithreaded features:
 
-> Corral follows a multi-threaded mode of concurrency with shared memory. The=
+> Corral follows a multi-threaded mode of concurrency with shared memory. The
 >  way to spawn a thread is:
 > 
 > async call foo(args);
 > 
-> All global variables are assumed to be shared among threads. Besides this, =
-> the only primitive you get is for atomic blocks. This can be done by calls =
+> All global variables are assumed to be shared among threads. Besides this, 
+> the only primitive you get is for atomic blocks. This can be done by calls 
 > to the following procedures:
 > 
 > procedure corral_atomic_begin();
 > procedure corral_atomic_end();
 > 
-> Assertions are not allowed to occur in atomic blocks, and atomic blocks can=
+> Assertions are not allowed to occur in atomic blocks, and atomic blocks can
 > not nest. Look at the examples in corral\test\regression\003
 
 But Zvonimir calls like this: call {:ASYNC} foo(args);
 Why the difference?  Is Akash misremembering, or is there a subtle difference,
 or what?
 TODO: ask ZR about this.
+
+>  The following are also supported primitives:
+> 
+> // Returns the thread ID of the current thread. 
+> procedure corral_getThreadID() returns (t:int);
+> 
+> // assert false
+> procedure corral_assert_not_reachable();
+> // There is no difference between this and a simple "assert false".  The
+> // procedure is useful only when the front-end doesn't have support for 
+> // assertions, in which case one can simulate assert(e) by "if(!e) 
+> // corral_assert_not_reachable();".
+> 
+> 
+> // For printing out values; supply the flag /printDataValues:1 to corral.
+> // Here, T can be any type, possibly user-defined, or boogie base type, 
+> // except for a map type. Whenever the error trace goes through a call 
+> // to this procedure, corral will print a message "v = blah", where 
+> // "blah" is the value of the argument to the call.
+> procedure boogie_si_record_T(x: T);
+
  
 (end of document)
 
