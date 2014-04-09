@@ -42,8 +42,8 @@
    #define _spthread_state_valid_assumption( aa )
 #else
    #define _spthread_state_valid_assumption( aa ) \
-      _SMACK_assume( "(_SPTHREAD_STATE_FIRST < " #aa ") && (" \
-	    #aa " < _SPTHREAD_STATE_LAST );
+      _SMACK_assume( "(_SPTHREAD_STATE_FIRST < (" #aa ") ) && " \
+	    "( (" #aa ") < _SPTHREAD_STATE_LAST" );
 #endif
 
 #define _SPTHREAD_MAX_THREADS (10)
@@ -87,8 +87,8 @@ typedef enum { _SPTHREAD_MUTEX_TYPE_FIRST= 0x6B46, // random val 1...32768
    #define _spthread_mutex_type_valid_assumption(aa) /* intentionally nothing */
 #else
    #define _spthread_mutex_type_valid_assumption(aa)  \
-      __SMACK_assume( "(_SPTHREAD_MUTEX_TYPE_FIRST < " #aa ") && " \
-	    "(" #aa " < _SPTHREAD_MUTEX_TYPE_LAST )" );
+      __SMACK_assume( "(_SPTHREAD_MUTEX_TYPE_FIRST < (" #aa ") ) && " \
+	    "( (" #aa ") < _SPTHREAD_MUTEX_TYPE_LAST )" );
 #endif
 
 typedef struct {
@@ -108,8 +108,8 @@ typedef enum { _SPTHREAD_MUTEX_FIRST= -1, _SPTHREAD_MUTEX_UNLOCKED= 0,
    #define _spthread_mutex_lock_valid_assumption(aa) /* intentionally nothing */
 #else
    #define _spthread_mutex_lock_valid_assumption(aa)  \
-      __SMACK_assume( "(_SPTHREAD_MUTEX_FIRST < " #aa ") && " \
-	    "(" #aa " < _SPTHREAD_MUTEX_LAST )" );
+      __SMACK_assume( "(_SPTHREAD_MUTEX_FIRST < (" #aa ") ) && " \
+	    "( (" #aa ") < _SPTHREAD_MUTEX_LAST )" );
 #endif
 
 typedef struct {
@@ -138,7 +138,7 @@ typedef struct {
    * Return Value: void
    *
    */
-#define _spthread_set_attr_to_defaults( aa ) { } /* intentionally nothing */
+#define _spthread_set_attr_to_defaults( aa ) /* intentionally nothing */
 
 /*** --------------------------------------------------------------------------
    * _spthread_ftn_wrapper()
@@ -197,11 +197,11 @@ void _spthread_ftn_wrapper( spthread_t thread,
    *
    */
 #define _spthread_ctl_arry_bounds_ptr_thm( aa ) \
-      smack_assert( "&_spthread_ctl_arry[0] <= (" #aa ") && " \
-	 "(" #aa ") <= _spthread_ctl_arry[_SPTHRAD_MAX_THREADS] " );
+      smack_assert( "(&_spthread_ctl_arry[0] <= (" #aa ") ) && " \
+	 "( (" #aa ") <= _spthread_ctl_arry[_SPTHRAD_MAX_THREADS] )" );
 #define _spthread_ctl_array_bounds_idx_thm( aa )  \
-      smack_assert( "0 <= (" #aa ") && " \
-	 "(" #aa ") <= _SPTHRAD_MAX_THREADS " );
+      smack_assert( "(0 <= (" #aa ") ) && " \
+	 "( (" #aa ") ) <= _SPTHRAD_MAX_THREADS " );
 
 int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
       spthread_start_routine_t* start_routine_ptr, void* arg_ptr )
