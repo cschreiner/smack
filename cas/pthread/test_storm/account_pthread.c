@@ -18,7 +18,7 @@ typedef struct {
 account_ptr_t create(int b) {
   account_ptr_t acc = (account_ptr_t) malloc(sizeof(account_t));
   acc->balance = b;
-  spthread_mutex_init(&(acc->lock), SPTHREAD_MUTEX_INITIALIZER );
+  spthread_mutex_init(&(acc->lock), &SPTHREAD_MUTEX_INITIALIZER );
   return acc;
 }
 
@@ -50,13 +50,17 @@ typedef struct {
 } thread_arg_t;
 
 // Thread 1
-void deposit_thread( thread_arg_t* aa ) {
-  deposit( aa->acc, aa->amt );
+void* deposit_thread( void* aa ) {
+  thread_arg_t* aa2= (thread_arg_t*) aa;
+  deposit( aa2->acc, aa2->amt );
+  return NULL;
 }
 
 // Thread 2
-void withdraw_thread( thread_arg_t* aa ) {
-  withdraw( aa->acc, aa->amt );
+void* withdraw_thread( void* aa ) {
+  thread_arg_t* aa2= (thread_arg_t*) aa;
+  withdraw( aa2->acc, aa2->amt );
+  return NULL;
 }
 
 
@@ -66,15 +70,15 @@ void main() {
   int x, y, z;
   spthread_t deposit_thread_ctl, withdraw_thread_ctl;
   thread_arg_t deposit_args, withdraw_args;
-  int* retval;
+  void* retval;
 
   // Initialization
   x = nondet();
   y = nondet();
   z = nondet();
   acc = create(x);
-  deposit_args= { acc, y );
-  withdraw_args= { acc, z );
+  deposit_args= (thread_arg_t){ acc, y };
+  withdraw_args= (thread_arg_t){ acc, z };
 
 
   // Threads
