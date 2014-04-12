@@ -35,6 +35,25 @@
 #include <errno.h>
 
 /*** **************************************************************************
+   *   stuff to add to smack.h or similar
+   * **************************************************************************
+   */
+
+#include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/llvm/install/lib/clang/3.4/include/stdbool.h"
+
+void corral_atomic_begin();
+void corral_atomic_end();
+void __SMACK_assert( bool vv );
+void __SMACK_assume( bool vv );
+void __SMACK_code( const char* fmt, ... );
+void __SMACK_decl( const char* fmt, ... );
+void __SMACK_top_decl( const char* fmt, ... );
+void __SMACK_code( const char* fmt, ... );
+void __SMACK_code( const char* fmt, ... );
+void __SMACK_code( const char* fmt, ... );
+
+
+/*** **************************************************************************
    *   declarations
    * **************************************************************************
    */
@@ -42,7 +61,7 @@
    #define _spthread_state_valid_assumption( aa )
 #else
    #define _spthread_state_valid_assumption( aa ) \
-      _SMACK_assume( "(_SPTHREAD_STATE_FIRST < (" #aa ") ) && " \
+      __SMACK_assume( "(_SPTHREAD_STATE_FIRST < (" #aa ") ) && " \
 	    "( (" #aa ") < _SPTHREAD_STATE_LAST" );
 #endif
 
@@ -185,7 +204,7 @@ void _spthread_ftn_wrapper( spthread_t thread,
    * Inputs:
    *    thread_ptr: pointer to the thread structure to control the thread.
    *    attr_ptr: pointer to a structure specifying attributes the thread 
-   *		should have.
+   *		should have.  If NULL, use default attributes.
    *	start_routine_ptr: pointer to the function that the thread should 
    *		run first.  
    *    arg_ptr: pointer to the single argument to pass to the start routine.
@@ -196,11 +215,11 @@ void _spthread_ftn_wrapper( spthread_t thread,
    * Return Value:
    *
    */
-#define _spthread_ctl_arry_bounds_ptr_thm( aa ) \
-      smack_assert( "(&_spthread_ctl_arry[0] <= (" #aa ") ) && " \
+#define _spthread_ctl_array_bounds_ptr_thm( aa ) \
+      __SMACK_assert( "(&_spthread_ctl_arry[0] <= (" #aa ") ) && " \
 	 "( (" #aa ") <= _spthread_ctl_arry[_SPTHRAD_MAX_THREADS] )" );
 #define _spthread_ctl_array_bounds_idx_thm( aa )  \
-      smack_assert( "(0 <= (" #aa ") ) && " \
+      __SMACK_assert( "(0 <= (" #aa ") ) && " \
 	 "( (" #aa ") ) <= _SPTHRAD_MAX_THREADS " );
 
 int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
@@ -217,7 +236,7 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
    return EAGAIN;
 
    found_ctl_struct:
-   _SPTHREAD_STATE_VALID_ASSUMPTION( _spthread_ctl_array[ii].state );
+   _spthread_state_valid_assumption( _spthread_ctl_array[ii].state );
 
    _spthread_ctl_array[ii].state= _SPTHREAD_STATE_RUNNING;
    if ( attr_ptr == NULL ) {
@@ -286,7 +305,7 @@ int spthread_join( spthread_t thread, void**retval )
    *
    * TODO2: add support for RECURSIVE and ERRORCHECK mutexes. 
    */
-spthread_mutex_init( spthread_mutex_t* mutex_ptr, 
+int spthread_mutex_init( spthread_mutex_t* mutex_ptr, 
       const spthread_mutex_attr_t* attr_ptr )
 {{
    mutex_ptr->lock= _SPTHREAD_MUTEX_UNLOCKED;
@@ -317,17 +336,19 @@ spthread_mutex_init( spthread_mutex_t* mutex_ptr,
    */
 int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 {{
+   int retval= 0;
+
    _spthread_mutex_lock_valid_assumption( mutex_ptr->lock );
 
    try_lock_again:
 
-   __SMACK_code( "call corral_atomic_begin();" );
-   int retval= 0;
+   //;;__SMACK_code( "call corral_atomic_begin();" );
+   retval= 0;
 
    switch ( mutex_ptr->lock ) {
       case _SPTHREAD_MUTEX_LOCKED:
          /* wait for mutex to become unlocked */
-	 __SMACK_code( "call corral_atomic_end();" );
+	 //;;__SMACK_code( "call corral_atomic_end();" );
          while( mutex_ptr->lock == _SPTHREAD_MUTEX_LOCKED ) {
             /* intentionally nothing */
 	 }
@@ -343,7 +364,7 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
          break;
    }
     
-   __SMACK_code( "call corral_atomic_end();" );
+   //;;__SMACK_code( "call corral_atomic_end();" );
    return retval;
 }}
 
