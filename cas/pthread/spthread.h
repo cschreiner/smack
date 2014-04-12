@@ -39,6 +39,7 @@
    * **************************************************************************
    */
 
+// TODO: replace all this with an explicit include of <smack.h>
 #include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/llvm/install/lib/clang/3.4/include/stdbool.h"
 
 void corral_atomic_begin();
