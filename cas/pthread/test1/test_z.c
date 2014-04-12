@@ -1,10 +1,11 @@
 #include <stdlib.h>
 #include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h"
+#include "/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h"
 
 int x = 1;
 
 void *my_procedure(void *my_argument) {
-  x = 0;
+  x = 10;
   return 0;
 }
 
@@ -13,17 +14,11 @@ void *another(void *my_argument) {
   return 0;
 }
 
-void call_something(void *(*proc)(void*), void *arg) {
-  proc(arg);
-}
-
-void pthread_create(void *(*proc)(void*), void *arg) {
-  __SMACK_code("call {:ASYNC} call_something(proc,arg);");
-}
+spthread_t thread1_ctl, thread2_ctl;
 
 int main() {
-  pthread_create(my_procedure, 0);
-  pthread_create(another,0);
-  return 0;
+   spthread_create(&thread1_ctl, NULL, my_procedure, 0);
+   spthread_create(&thread2_ctl, NULL, another, 0);
+   return 0;
 }
 
