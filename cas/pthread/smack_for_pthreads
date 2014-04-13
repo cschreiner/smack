@@ -2,4 +2,4 @@
 # runs smack verifier with options Z wants me to use for pthread work.
 # The normal smack-verifier.py program must be on the PATH.
 
-smack-verifier.py --verifier corral --mem-impls "$@"
+smack-verify.py --verifier corral --mem-impls "$@"
