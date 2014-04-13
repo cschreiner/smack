@@ -38,20 +38,25 @@
    *   stuff to add to smack.h or similar
    * **************************************************************************
    */
+#if 1 //;;
+   #include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h"
 
-// TODO: replace all this with an explicit include of <smack.h>
-#include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/llvm/install/lib/clang/3.4/include/stdbool.h"
+#else
+   // TODO: replace all this with an explicit include of <smack.h>
+   #include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/llvm/install/lib/clang/3.4/include/stdbool.h"
 
-void corral_atomic_begin();
-void corral_atomic_end();
-void __SMACK_assert( bool vv );
-void __SMACK_assume( bool vv );
-void __SMACK_code( const char* fmt, ... );
-void __SMACK_decl( const char* fmt, ... );
-void __SMACK_top_decl( const char* fmt, ... );
-void __SMACK_code( const char* fmt, ... );
-void __SMACK_code( const char* fmt, ... );
-void __SMACK_code( const char* fmt, ... );
+   int nondet(); // this function may need to be implemented in SMACK.
+   void corral_atomic_begin();
+   void corral_atomic_end();
+   void __SMACK_assert( bool vv );
+   void __SMACK_assume( bool vv );
+   void __SMACK_code( const char* fmt, ... );
+   void __SMACK_decl( const char* fmt, ... );
+   void __SMACK_top_decl( const char* fmt, ... );
+   void __SMACK_code( const char* fmt, ... );
+   void __SMACK_code( const char* fmt, ... );
+   void __SMACK_code( const char* fmt, ... );
+#endif
 
 
 /*** **************************************************************************
