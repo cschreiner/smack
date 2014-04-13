@@ -65,7 +65,7 @@ void* withdraw_thread( void* aa ) {
 
 
 // =========================================================================
-void main() {
+int main() {
   account_ptr_t acc;
   int x, y, z;
   spthread_t deposit_thread_ctl, withdraw_thread_ctl;
@@ -73,9 +73,9 @@ void main() {
   void* retval;
 
   // Initialization
-  x = nondet();
-  y = nondet();
-  z = nondet();
+  x = __SMACK_nondet();
+  y = __SMACK_nondet();
+  z = __SMACK_nondet();
   acc = create(x);
   deposit_args= (thread_arg_t){ acc, y };
   withdraw_args= (thread_arg_t){ acc, z };
