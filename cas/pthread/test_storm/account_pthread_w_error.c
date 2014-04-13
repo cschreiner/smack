@@ -87,7 +87,7 @@ int main() {
   spthread_join( deposit_thread_ctl, &retval );
   spthread_join( withdraw_thread_ctl, &retval );
 
-  __SMACK_assert(read(acc) == x + y - z +1);
+  __SMACK_assert(read(acc) == x + y - z +1); // ERROR: the +1 is wrong.
 }
 
 
