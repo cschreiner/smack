@@ -7,13 +7,13 @@ Verifying program while tracking: {assertsPassed, $M.5, $M.11}
 Program has no bugs
 Reached recursion bound of 2
 
-Boogie verification time: 1.64 s
-Time spent reading-writing programs: 0.81 s
+Boogie verification time: 1.83 s
+Time spent reading-writing programs: 0.84 s
 
-Time spent checking a program (3): 1.39 s
-Time spent checking a path (6): 1.46 s
+Time spent checking a program (3): 1.55 s
+Time spent checking a path (6): 1.53 s
 
-Number of procedures inlined: 45
+Number of procedures inlined: 53
 Number of variables tracked: 3
-Total Time: 3.349041 s
+Total Time: 3.589874 s
 
