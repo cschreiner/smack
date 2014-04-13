@@ -28,7 +28,7 @@ int read(account_ptr_t acc) {
 
 void deposit(account_ptr_t acc, int n) {
   spthread_mutex_lock(&acc->lock);
-  acc->balance = acc->balance + n;
+  acc->balance = acc->balance + n+ 2; // ERROR: the +2 is wrong
   spthread_mutex_unlock(&acc->lock);
 }
 
