@@ -353,7 +353,7 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
    /* match the AcquireSpinLock() function in storm's locks.h */
    __SMACK_code( "call corral_atomic_begin();" );
 
-   // TODO: make this match locks.h 
+   // TODO: make this match locks.h, including the ghost variable. 
 
    __SMACK_assume( mutex_ptr->lock == _SPTHREAD_MUTEX_VAL_LOCKED );
    lock_status= mutex_ptr->lock;
@@ -397,6 +397,8 @@ int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
    __SMACK_top_decl( "procedure corral_atomic_end();" );
 
    retval= 0;
+
+   // TODO: make this match locks.h, including the ghost variable. 
 
    /* match the ReleaseSpinLock() function in storm's locks.h */
    __SMACK_code( "call corral_atomic_begin();" );
