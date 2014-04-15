@@ -105,6 +105,7 @@ typedef enum { _SPTHREAD_MUTEX_TYPE_FIRST= 0x6B46, // random val 1...32768
       _SPTHREAD_MUTEX_TYPE_RECURSIVE,
       _SPTHREAD_MUTEX_TYPE_ERRORCHECK,
       _SPTHREAD_MUTEX_TYPE_LAST } _spthread_mutex_type_t;
+
 #if defined(_SPTHREAD_FAULT_TOLERANT_PROOFS)
    #define _spthread_mutex_type_valid_assumption(aa) /* intentionally nothing */
 #else
@@ -123,8 +124,8 @@ spthread_mutex_attr_t SPTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP=
 spthread_mutex_attr_t SPTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP= 
       { _SPTHREAD_MUTEX_TYPE_ERRORCHECK };
 
-typedef enum { _SPTHREAD_MUTEX_FIRST= -1, _SPTHREAD_MUTEX_UNLOCKED= 0,
-      _SPTHREAD_MUTEX_LOCKED, _SPTHREAD_MUTEX_LAST } 
+typedef enum { _SPTHREAD_MUTEX_VAL_FIRST= -1, _SPTHREAD_MUTEX_VAL_UNLOCKED= 0,
+      _SPTHREAD_MUTEX_VAL_LOCKED, _SPTHREAD_MUTEX_VAL_LAST } 
       _spthread_mutex_val_t;
 #if defined(_SPTHREAD_FAULT_TOLERANT_PROOFS)
    #define _spthread_mutex_lock_valid_assumption(aa) /* intentionally nothing */
@@ -311,7 +312,7 @@ int spthread_join( spthread_t thread, void**retval )
 int spthread_mutex_init( spthread_mutex_t* mutex_ptr, 
       const spthread_mutex_attr_t* attr_ptr )
 {{
-   mutex_ptr->lock= _SPTHREAD_MUTEX_UNLOCKED;
+   mutex_ptr->lock= _SPTHREAD_MUTEX_VAL_UNLOCKED;
    return 0;
 }}
 
@@ -340,37 +341,29 @@ int spthread_mutex_init( spthread_mutex_t* mutex_ptr,
 int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 {{
    int retval= 0;
+   _spthread_mutex_val_t lock_status;
 
    _spthread_mutex_lock_valid_assumption( mutex_ptr->lock );
 
    __SMACK_top_decl( "procedure corral_atomic_begin();" );
    __SMACK_top_decl( "procedure corral_atomic_end();" );
 
-   try_lock_again:
-
-   __SMACK_code( "call corral_atomic_begin();" );
    retval= 0;
 
-   switch ( mutex_ptr->lock ) {
-      case _SPTHREAD_MUTEX_LOCKED:
-         /* wait for mutex to become unlocked */
-	 //;;__SMACK_code( "call corral_atomic_end();" );
-         while( mutex_ptr->lock == _SPTHREAD_MUTEX_LOCKED ) {
-            /* intentionally nothing */
-	 }
-         goto try_lock_again;
-         break;
-      case _SPTHREAD_MUTEX_UNLOCKED:
-         mutex_ptr->lock= _SPTHREAD_MUTEX_LOCKED;
-         retval= 0;
-         break;
-      default:
-         /* something is wrong */
-         retval= EINVAL;
-         break;
-   }
-    
+   /* match the AcquireSpinLock() function in storm's locks.h */
+   __SMACK_code( "call corral_atomic_begin();" );
+
+   // TODO: make this match locks.h 
+
+   __SMACK_assume( mutex_ptr->lock == _SPTHREAD_MUTEX_VAL_LOCKED );
+   lock_status= mutex_ptr->lock;
+   __SMACK_assert( _SPTHREAD_MUTEX_VAL_LOCKED != lock_status );
+   __SMACK_assume( lock_status == _SPTHREAD_MUTEX_VAL_LOCKED );
+   mutex_ptr->lock= _SPTHREAD_MUTEX_VAL_UNLOCKED;
+
    __SMACK_code( "call corral_atomic_end();" );
+   /* end match */
+
    return retval;
 }}
 
@@ -398,12 +391,24 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
 {{
    _spthread_mutex_lock_valid_assumption( mutex_ptr->lock );
+   _spthread_mutex_val_t lock_status;
 
-   if ( mutex_ptr->lock == _SPTHREAD_MUTEX_LOCKED ) {
-      mutex_ptr->lock= _SPTHREAD_MUTEX_UNLOCKED;
-      return 0;
-   }
-   return EINVAL;
+   __SMACK_top_decl( "procedure corral_atomic_begin();" );
+   __SMACK_top_decl( "procedure corral_atomic_end();" );
+
+   retval= 0;
+
+   /* match the ReleaseSpinLock() function in storm's locks.h */
+   __SMACK_code( "call corral_atomic_begin();" );
+
+   __SMACK_assume( _SPTHREAD_MUTEX_VAL_LOCKED == lock_status );
+   __SMACK_assert( lock_status == _SPTHREAD_MUTEX_VAL_LOCKED );
+   mutex_ptr->lock= _SPTHREAD_MUTEX_VAL_UNLOCKED;
+
+   __SMACK_code( "call corral_atomic_end();" );
+   /* end match */
+
+   return retval;
 }}
 
 
