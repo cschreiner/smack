@@ -348,7 +348,7 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 
    try_lock_again:
 
-   //;;__SMACK_code( "call corral_atomic_begin();" );
+   __SMACK_code( "call corral_atomic_begin();" );
    retval= 0;
 
    switch ( mutex_ptr->lock ) {
@@ -370,7 +370,7 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
          break;
    }
     
-   //;;__SMACK_code( "call corral_atomic_end();" );
+   __SMACK_code( "call corral_atomic_end();" );
    return retval;
 }}
 
@@ -398,6 +398,7 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
 {{
    _spthread_mutex_lock_valid_assumption( mutex_ptr->lock );
+
    if ( mutex_ptr->lock == _SPTHREAD_MUTEX_LOCKED ) {
       mutex_ptr->lock= _SPTHREAD_MUTEX_UNLOCKED;
       return 0;
