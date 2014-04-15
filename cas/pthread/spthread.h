@@ -343,6 +343,9 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 
    _spthread_mutex_lock_valid_assumption( mutex_ptr->lock );
 
+   __SMACK_top_decl( "procedure corral_atomic_begin();" );
+   __SMACK_top_decl( "procedure corral_atomic_end();" );
+
    try_lock_again:
 
    //;;__SMACK_code( "call corral_atomic_begin();" );
