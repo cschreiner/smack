@@ -9,8 +9,12 @@ Currently the whole directory to this file is required, like this:
 nothing was verified at all, or does it mean no assertions were verified?
 TODO: verify this with ZR.
 
+[ ] Question: in smack.h, there is a comment about the "2D memory model".
+What distinguishes this model from other memory models?  Do I need to factor
+this into my work somehow?
+
 Smack Desired Features
-----------------
+----------------------
 
 [ ] add feature that when smack invokes clang, it automatically adds the
 appropriate include dir via an -I option so that smack.h can be included as
@@ -28,6 +32,16 @@ pointing to them.  Akin to what I have in TUUT.
 [ ] foreach .py file in smack/bin, have a symbolic link pointing to it without
 the .py suffix, to save on typing.  For example, a link called foo pointing to
 foo.py.
+
+[ ] direct SMACK statements for atomic_begin() and atomic_end().  They can
+be implemented differently depending on the back end.
+
+[ ] have a preprocessor symbol #define __SMACK (used to #if out code used
+only for verification).
+
+[ ] have a preprocessor symbol specifying which backend SMACK is using, e.g.
+#define __SMACK_BACKEND_CORRAL or __SMACK_BACKEND_BOOGIE.  Used to qualify
+code in __SMACK_decl*() functions that only makes sense with one backend.
 
 
 (end of file)
