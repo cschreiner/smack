@@ -33,6 +33,7 @@ void deposit(account_ptr_t acc, int n) {
 }
 
 void withdraw(account_ptr_t acc, int n) {
+  __SMACK_assert( FALSE );;
   int r;
   spthread_mutex_lock(&acc->lock);
   r = read(acc); // why are we storing balance in a local var?
