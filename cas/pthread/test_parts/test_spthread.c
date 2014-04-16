@@ -11,7 +11,7 @@ void *my_procedure(void *my_argument) {
 }
 
 void *another(void *my_argument) {
-  __SMACK_assert(x > 0);
+  __SMACK_assert(x > 0); // this should fail
   return 0;
 }
 
