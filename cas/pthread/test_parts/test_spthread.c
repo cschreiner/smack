@@ -4,7 +4,6 @@
 
 int x = 1;
 spthread_t my_proc_thread_ctl, another_thread_ctl;
-spthread_attr_t attrs;
 
 void *my_procedure(void *my_argument) {
   x = 0;
@@ -17,8 +16,8 @@ void *another(void *my_argument) {
 }
 
 int main() {
-   spthread_create(&my_proc_thread_ctl, &attrs, my_procedure, 0);
-   spthread_create(&another_thread_ctl, &attrs, another, 0);
+   spthread_create(&my_proc_thread_ctl, my_procedure, 0);
+   spthread_create(&another_thread_ctl, another, 0);
    return 0;
 }
 
