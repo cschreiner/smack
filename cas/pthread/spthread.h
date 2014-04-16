@@ -357,8 +357,6 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
     */
    __SMACK_code( "call corral_atomic_begin();" );
 
-   // TODO: make this match locks.h, including the ghost variable. 
-
    __SMACK_assume( mutex_ptr->lock == lock_status );
    __SMACK_assert( _SPTHREAD_MUTEX_VAL_LOCKED != lock_status );
    __SMACK_assume( lock_status == _SPTHREAD_MUTEX_VAL_UNLOCKED );
@@ -399,7 +397,7 @@ int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
    __SMACK_top_decl( "procedure corral_atomic_begin();" );
    __SMACK_top_decl( "procedure corral_atomic_end();" );
 
-   retval= 0;
+   int retval= 0;
 
    // TODO: make this match locks.h, including the ghost variable. 
 
