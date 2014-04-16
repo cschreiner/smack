@@ -49,29 +49,15 @@
 
 typedef void* spthread_start_routine_t( void *arg_ptr);
 
-typedef enum { _SPTHREAD_STATE_FIRST= 0x8887, // random num 1...32767
-      _SPTHREAD_STATE_INITIALIZED, _SPTHREAD_STATE_RUNNING, 
-      _SPTHREAD_STATE_DONE,
-      _SPTHREAD_STATE_LAST } _spthread_state_t;
-
 /* main control structure for a thread */
 typedef struct {
    _spthread_state_t state;
-} _spthread_ctl_t;
-
-typedef _spthread_ctl_t* spthread_t;
-
-_spthread_ctl_t _spthread_ctl_array[ _SPTHREAD_MAX_THREADS+ 1 ];
-/* Note: each element in this array should be initialized when
-   pthread_create() initializes it. 
-*/
-
+} spthread_t;
 
 /* ..........................................................................
    locking structures
 */
-typedef enum { _SPTHREAD_MUTEX_VAL_FIRST= -1, _SPTHREAD_MUTEX_VAL_UNLOCKED= 0,
-      _SPTHREAD_MUTEX_VAL_LOCKED, _SPTHREAD_MUTEX_VAL_LAST } 
+typedef enum { _SPTHREAD_MUTEX_VAL_UNLOCKED= 0, _SPTHREAD_MUTEX_VAL_LOCKED }
       _spthread_mutex_val_t;
 
 typedef struct {
@@ -104,15 +90,10 @@ typedef struct {
    * Return Value: void
    *
    */
-void _spthread_ftn_wrapper( spthread_t thread, 
+void _spthread_ftn_wrapper( spthread_t* thread, 
       spthread_start_routine_t* start_routine_ptr, void* arg_ptr )
 {{
    (*start_routine_ptr)(arg_ptr);
-   thread->state= _SPTHREAD_STATE_DONE;
-   /* TODO2: find some way to move unused threads from state
-      _SPTHREAD_STATE_DONE back to _SPTHREAD_STATE_INITIALIZED so the control
-      structure can be reused.
-    */
 }}
 
 
@@ -140,21 +121,6 @@ void _spthread_ftn_wrapper( spthread_t thread,
 int spthread_create( spthread_t* thread_ptr, 
       spthread_start_routine_t* start_routine_ptr, void* arg_ptr )
 {{
-   /* find an unused thread control structure */
-   int ii;
-   for ( ii= 0; ii < _SPTHREAD_MAX_THREADS; ii++ ) {
-      if ( _spthread_ctl_array[ii].state!= _SPTHREAD_STATE_RUNNING ) {
-         goto found_ctl_struct;
-      }
-   }
-   // apparently no control structures are available
-   return EAGAIN;
-
-   found_ctl_struct:
-
-   _spthread_ctl_array[ii].state= _SPTHREAD_STATE_RUNNING;
-   *thread_ptr= &_spthread_ctl_array[ii];
-   /* TODO: double check the thread start code here */ 
    __SMACK_code( "call {:ASYNC} _spthread_ftn_wrapper( " 
 	 "thread_ptr, start_routine_ptr, arg_ptr );" ); 
 
