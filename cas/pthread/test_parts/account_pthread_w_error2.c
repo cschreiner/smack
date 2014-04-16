@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../spthread.h"
+#include "spthread_parts.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -82,8 +82,8 @@ int main() {
 
 
   // Threads
-  spthread_create( &deposit_thread_ctl, NULL, deposit_thread, &deposit_args  );
-  spthread_create( &withdraw_thread_ctl, NULL, withdraw_thread, &withdraw_args );
+  spthread_create( &deposit_thread_ctl, deposit_thread, &deposit_args  );
+  spthread_create( &withdraw_thread_ctl, withdraw_thread, &withdraw_args );
   spthread_join( deposit_thread_ctl, &retval );
   spthread_join( withdraw_thread_ctl, &retval );
 
