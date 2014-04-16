@@ -51,7 +51,7 @@ typedef void* spthread_start_routine_t( void *arg_ptr);
 
 /* main control structure for a thread */
 typedef struct {
-   _spthread_state_t state;
+   char dummy;
 } spthread_t;
 
 /* ..........................................................................
