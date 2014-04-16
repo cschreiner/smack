@@ -38,22 +38,7 @@
    *   stuff to add to smack.h or similar
    * **************************************************************************
    */
-#if 1 //;;
-   #include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h"
-
-#else
-   // TODO: replace all this with an explicit include of <smack.h>
-   #include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/llvm/install/lib/clang/3.4/include/stdbool.h"
-
-   int nondet(); // this function may need to be implemented in SMACK.
-   void corral_atomic_begin();
-   void corral_atomic_end();
-   void __SMACK_assert( bool vv );
-   void __SMACK_assume( bool vv );
-   void __SMACK_code( const char* fmt, ... );
-   void __SMACK_decl( const char* fmt, ... );
-   void __SMACK_top_decl( const char* fmt, ... );
-#endif
+#include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h"
 
 
 /*** **************************************************************************
@@ -341,7 +326,7 @@ int spthread_mutex_init( spthread_mutex_t* mutex_ptr,
 int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 {{
    int retval= 0;
-   _spthread_mutex_val_t lock_status;
+   _spthread_mutex_val_t lock_status= _SPTHREAD_MUTEX_VAL_UNLOCKED;
 
    _spthread_mutex_lock_valid_assumption( mutex_ptr->lock );
 
@@ -392,7 +377,7 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
 {{
    _spthread_mutex_lock_valid_assumption( mutex_ptr->lock );
-   _spthread_mutex_val_t lock_status;
+   _spthread_mutex_val_t lock_status= _SPTHREAD_MUTEX_VAL_UNLOCKED;
 
    __SMACK_top_decl( "procedure corral_atomic_begin();" );
    __SMACK_top_decl( "procedure corral_atomic_end();" );
