@@ -34,10 +34,6 @@
 #include <stdlib.h>
 #include <errno.h>
 
-/*** **************************************************************************
-   *   stuff to add to smack.h or similar
-   * **************************************************************************
-   */
 #include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h"
 
 
