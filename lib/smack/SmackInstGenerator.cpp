@@ -282,24 +282,12 @@ void SmackInstGenerator::visitStoreInst(llvm::StoreInst& si) {
 
 void SmackInstGenerator::visitAtomicCmpXchgInst(llvm::AtomicCmpXchgInst& i) {
   processInstruction(i);
-
-  string x = createVar();
-
-  const Expr
-  *res = rep.expr(&i),
-   *piv = rep.mem(i.getOperand(0)),
-    *cmp = rep.expr(i.getOperand(1)),
-     *swp = rep.expr(i.getOperand(2));
-
-  // NOTE: could also do this with gotos, but perhaps we do not want to
-  // spread atomic instructions across blocks (?)
-  currBlock->addStmt(Stmt::assign(res, piv));
-  currBlock->addStmt(Stmt::havoc(x));
-  currBlock->addStmt(Stmt::assume(
-                       Expr::impl(Expr::eq(piv, cmp), Expr::eq(Expr::id(x), swp))));
-  currBlock->addStmt(Stmt::assume(
-                       Expr::impl(Expr::neq(piv, cmp), Expr::eq(Expr::id(x), res))));
-  currBlock->addStmt(Stmt::assign(piv, Expr::id(x)));
+  const Expr* res = rep.expr(&i);
+  const Expr* ptr = rep.mem(i.getOperand(0));
+  const Expr* cmp = rep.expr(i.getOperand(1));
+  const Expr* swp = rep.expr(i.getOperand(2));
+  currBlock->addStmt(Stmt::assign(res,ptr));
+  currBlock->addStmt(Stmt::assign(ptr,Expr::cond(Expr::eq(ptr,cmp),swp,ptr)));
 }
 
 void SmackInstGenerator::visitAtomicRMWInst(llvm::AtomicRMWInst& i) {
@@ -499,6 +487,9 @@ void SmackInstGenerator::visitCallInst(llvm::CallInst& ci) {
     WARN("ignoring llvm.debug call.");
     currBlock->addStmt(Stmt::skip());
 
+  } else if (f && rep.id(f) == "__SMACK_mod") {
+    proc.addMod(rep.code(ci));
+
   } else if (f && rep.id(f) == "__SMACK_code") {
     currBlock->addStmt(Stmt::code(rep.code(ci)));
 
@@ -525,6 +516,8 @@ void SmackInstGenerator::visitCallInst(llvm::CallInst& ci) {
         llvm::Value* castValue = ce->getOperand(0);
         if (llvm::Function* castFunc = llvm::dyn_cast<llvm::Function>(castValue)) {
           currBlock->addStmt(rep.call(castFunc, ci));
+          if (castFunc->isDeclaration() && rep.isExternal(&ci))
+            currBlock->addStmt(Stmt::assume(Expr::fn("$isExternal",rep.expr(&ci))));
           return;
         }
       }
@@ -574,6 +567,9 @@ void SmackInstGenerator::visitCallInst(llvm::CallInst& ci) {
       currBlock->addStmt(Stmt::skip());
     }
   }
+
+  if (f && f->isDeclaration() && rep.isExternal(&ci))
+    currBlock->addStmt(Stmt::assume(Expr::fn("$isExternal",rep.expr(&ci))));
 }
 
 /******************************************************************************/
