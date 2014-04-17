@@ -1,0 +1,5 @@
+ensures (forall x: int :: dest <= x && x < dest + len ==> $M.0[x] == old($M.0)[src - dest + x]);
+
+Error, Invalid input: Input Program not well-formed.
+Ensures has a shared global
+
