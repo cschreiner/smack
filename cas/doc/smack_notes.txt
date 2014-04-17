@@ -28,7 +28,18 @@ object-ish files:
    corral_out_trace.txt seems to contain info on paths explored by corral.
    file.bc contains LLVM bitcode, which SMACK then parses into bpl code.
 	   
-	  
+[ ] Debugging an assertion that should fail but isn't:
+You open your bpl file and add "assert false;" to the beginning if main. You
+invoke corral on this bpl file. Clearly, this "assert false" will fail since
+it is in the beginning of main. Then, you keep moving "assert false;" through
+your code until you find the exact instruction that causes "assert false" to
+be vacuously true. Then you focus on figuring out what is wrong with that
+instruction. And the problem will almost always be an assume instruction.
+For example, this `assert false` won't yield an error:
+
+	x := 1;
+	assume x == 0;
+	assert false;
   
 
 Smack Desired Features
@@ -60,6 +71,9 @@ only for verification).
 [ ] have a preprocessor symbol specifying which backend SMACK is using, e.g.
 #define __SMACK_BACKEND_CORRAL or __SMACK_BACKEND_BOOGIE.  Used to qualify
 code in __SMACK_decl*() functions that only makes sense with one backend.
+
+[ ] consider having smack rename the corral object-ish files created to begin
+with the unsuffixed basename of the source file.
 
 
 (end of file)
