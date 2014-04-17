@@ -40,6 +40,8 @@ For example, this `assert false` won't yield an error:
 	x := 1;
 	assume x == 0;
 	assert false;
+
+[ ] __SMACK_assume( xxx ) means "either xxx is true, or exit()".
   
 
 Smack Desired Features
