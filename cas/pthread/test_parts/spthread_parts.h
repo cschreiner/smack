@@ -184,6 +184,9 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 {{
    int retval= 0;
 
+   __SMACK_top_decl( "procedure corral_atomic_begin();" );
+   __SMACK_top_decl( "procedure corral_atomic_end();" );
+
    __SMACK_code( "call corral_atomic_begin();" );
 
    __SMACK_assume( mutex_ptr->lock == _SPTHREAD_MUTEX_VAL_UNLOCKED );
@@ -218,6 +221,9 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
 {{
    int retval= 0;
+
+   __SMACK_top_decl( "procedure corral_atomic_begin();" );
+   __SMACK_top_decl( "procedure corral_atomic_end();" );
 
    __SMACK_code( "call corral_atomic_begin();" );
 
