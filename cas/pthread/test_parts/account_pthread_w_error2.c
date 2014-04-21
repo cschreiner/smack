@@ -5,6 +5,8 @@
 #define TRUE 1
 #define FALSE 0
 
+int withdraw_thread_done;
+int deposit_thread_done;
 
 // Bank Account Example
 
@@ -33,9 +35,11 @@ void deposit(account_ptr_t acc, int n) {
 }
 
 void withdraw(account_ptr_t acc, int n) {
+//  __SMACK_assert( FALSE );;
   int r;
   spthread_mutex_lock(&acc->lock);
-  r = read(acc); // why are we storing balance in a local var?
+  r = read(acc); // why are we storing balance in a local var? ZVONIMIR: So that we can easily introduce this concurrency bug, which is typically called "lost atomicity".
+//  spthread_mutex_lock(&acc->lock);
   acc->balance = r - n;
   spthread_mutex_unlock(&acc->lock);
 }
@@ -53,6 +57,7 @@ typedef struct {
 void* deposit_thread( void* aa ) {
   thread_arg_t* aa2= (thread_arg_t*) aa;
   deposit( aa2->acc, aa2->amt );
+  deposit_thread_done = TRUE;
   return NULL;
 }
 
@@ -60,6 +65,7 @@ void* deposit_thread( void* aa ) {
 void* withdraw_thread( void* aa ) {
   thread_arg_t* aa2= (thread_arg_t*) aa;
   withdraw( aa2->acc, aa2->amt );
+  withdraw_thread_done = TRUE;
   return NULL;
 }
 
@@ -72,6 +78,8 @@ int main() {
   thread_arg_t deposit_args, withdraw_args;
 
   // Initialization
+  withdraw_thread_done = FALSE;
+  deposit_thread_done = FALSE;
   x = __SMACK_nondet();
   y = __SMACK_nondet();
   z = __SMACK_nondet();
@@ -84,9 +92,11 @@ int main() {
   spthread_create( &deposit_thread_ctl, deposit_thread, &deposit_args  );
   spthread_create( &withdraw_thread_ctl, withdraw_thread, &withdraw_args );
 
-  __SMACK_assert(read(acc) == x + y - z);
+  __SMACK_assume(withdraw_thread_done == TRUE && deposit_thread_done == TRUE);
+  __SMACK_assert(read(acc) == x + y - z); 
 }
 
 
 // =========================================================================
 // end of file
+

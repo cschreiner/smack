@@ -93,7 +93,7 @@ int main() {
   spthread_create( &withdraw_thread_ctl, withdraw_thread, &withdraw_args );
 
   __SMACK_assume(withdraw_thread_done == TRUE && deposit_thread_done == TRUE);
-  __SMACK_assert(read(acc) == x + y - z); // ERROR: the +1 is wrong.
+  __SMACK_assert(read(acc) == x + y - z); 
 }
 
 
