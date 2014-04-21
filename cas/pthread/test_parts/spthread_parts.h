@@ -117,6 +117,17 @@ void _spthread_ftn_wrapper( spthread_t* thread,
 int spthread_create( spthread_t* thread_ptr, 
       spthread_start_routine_t* start_routine_ptr, void* arg_ptr )
 {{
+   #if 1 
+      /* workaround to get pointer analysis to work properly in the 
+	 presence of __SMACK_code(). 
+      */
+      int tmp= __SMACK_nondet();
+      __SMACK_code( "assume @ == 0;", tmp );
+      if ( tmp ) {
+	 _spthread_ftn_wrapper( thread_ptr, start_routine_ptr, arg_ptr );
+      }
+   #endif
+  
    __SMACK_code( "call {:ASYNC} _spthread_ftn_wrapper( " 
 	 "thread_ptr, start_routine_ptr, arg_ptr );" ); 
 
@@ -172,27 +183,13 @@ int spthread_mutex_init( spthread_mutex_t* mutex_ptr )
 int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 {{
    int retval= 0;
-   _spthread_mutex_val_t lock_status= _SPTHREAD_MUTEX_VAL_UNLOCKED;
 
-   __SMACK_top_decl( "procedure corral_atomic_begin();" );
-   __SMACK_top_decl( "procedure corral_atomic_end();" );
-
-   retval= 0;
-
-   /* match the AcquireSpinLock() function in storm's locks.h:
-      mutex_ptr->lock corresponds to __resource("LOCK", SpinLock).
-      _SPTHREAD_MUTEX_VAL_UNLOCKED corresponds to UNLOCKED.
-      _SPTHREAD_MUTEX_VAL_LOCKED corresponds to storm_getThreadID() aka tid.
-    */
    __SMACK_code( "call corral_atomic_begin();" );
 
-   __SMACK_assume( mutex_ptr->lock == lock_status );
-   __SMACK_assert( _SPTHREAD_MUTEX_VAL_LOCKED != lock_status );
-   __SMACK_assume( lock_status == _SPTHREAD_MUTEX_VAL_UNLOCKED );
+   __SMACK_assume( mutex_ptr->lock == _SPTHREAD_MUTEX_VAL_UNLOCKED );
    mutex_ptr->lock= _SPTHREAD_MUTEX_VAL_LOCKED;
 
    __SMACK_code( "call corral_atomic_end();" );
-   /* end match */
 
    return retval;
 }}
@@ -220,26 +217,14 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
    */
 int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
 {{
-   _spthread_mutex_val_t lock_status= _SPTHREAD_MUTEX_VAL_UNLOCKED;
-
-   __SMACK_top_decl( "procedure corral_atomic_begin();" );
-   __SMACK_top_decl( "procedure corral_atomic_end();" );
-
    int retval= 0;
 
-   /* match the ReleaseSpinLock() function in storm's locks.h:
-      mutex_ptr->lock corresponds to __resource("LOCK", SpinLock).
-      _SPTHREAD_MUTEX_VAL_UNLOCKED corresponds to UNLOCKED.
-      _SPTHREAD_MUTEX_VAL_LOCKED corresponds to storm_getThreadID() aka tid.
-    */
    __SMACK_code( "call corral_atomic_begin();" );
 
-   __SMACK_assume( mutex_ptr->lock == lock_status );
-   __SMACK_assert( lock_status == _SPTHREAD_MUTEX_VAL_LOCKED );
+   __SMACK_assume( mutex_ptr->lock == _SPTHREAD_MUTEX_VAL_LOCKED );
    mutex_ptr->lock= _SPTHREAD_MUTEX_VAL_UNLOCKED;
 
    __SMACK_code( "call corral_atomic_end();" );
-   /* end match */
 
    return retval;
 }}
