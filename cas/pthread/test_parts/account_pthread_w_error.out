@@ -1,16 +1,16 @@
 Single threaded program detected
 Verifying program while tracking: {assertsPassed}
 Program has a potential bug: False bug
-Verifying program while tracking: {assertsPassed, $M.2}
+Verifying program while tracking: {assertsPassed, $M.1}
 Program has no bugs
 
-Boogie verification time: 0.57 s
-Time spent reading-writing programs: 0.34 s
+Boogie verification time: 0.62 s
+Time spent reading-writing programs: 0.35 s
 
-Time spent checking a program (2): 0.63 s
-Time spent checking a path (3): 0.46 s
+Time spent checking a program (2): 0.66 s
+Time spent checking a path (3): 0.49 s
 
-Number of procedures inlined: 26
+Number of procedures inlined: 28
 Number of variables tracked: 2
-Total Time: 1.534078 s
+Total Time: 1.552374 s
 
