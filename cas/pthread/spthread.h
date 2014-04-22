@@ -154,16 +154,29 @@ void _spthread_ftn_wrapper( spthread_t thread,
 int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
       spthread_start_routine_t* start_routine_ptr, void* arg_ptr )
 {{
-   /* find an unused thread control structure */
    int ii;
-   for ( ii= 0; ii < _SPTHREAD_MAX_THREADS; ii++ ) {
-      if ( _spthread_ctl_array[ii].state!= _SPTHREAD_STATE_RUNNING ) {
-         goto found_ctl_struct;
-      }
-   }
-   // apparently no control structures are available
-   return EAGAIN;
 
+   /* . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+      allocate a control structure
+    */
+   #if defined(SMACK)
+      ii= __SMACK_nondet();
+      __SMACK_assume( 0 <= ii && ii < _SPTHREAD_MAX_THREADS );
+      __SMACK_assume( _spthread_ctl_array[ii].state != _SPTHREAD_STATE_RUNNING );
+   #else
+      /* find an unused thread control structure */
+      for ( ii= 0; ii < _SPTHREAD_MAX_THREADS; ii++ ) {
+	 if ( _spthread_ctl_array[ii].state!= _SPTHREAD_STATE_RUNNING ) {
+	    goto found_ctl_struct;
+	 }
+      }
+      // apparently no control structures are available
+      return EAGAIN;
+   #endif
+
+   /* . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+      initialize the control structure
+    */
    found_ctl_struct:
    _spthread_state_valid_assumption( _spthread_ctl_array[ii].state );
 
@@ -174,10 +187,27 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
       _spthread_ctl_array[ii].attrs= *attr_ptr;
    }
    *thread_ptr= &_spthread_ctl_array[ii];
-   /* TODO: double check the thread start code here */ 
-   __SMACK_code( "call {:ASYNC} _spthread_ftn_wrapper( " 
-	 "thread_ptr, start_routine_ptr, arg_ptr );" ); 
 
+   /* . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+      start the thread
+    */
+   #if 1 
+      /* workaround to get pointer analysis to work properly in the 
+	 presence of __SMACK_code(). 
+      */
+      int tmp= __SMACK_nondet();
+      __SMACK_code( "assume @ == 0;", tmp );
+      if ( tmp ) {
+	 _spthread_ftn_wrapper( thread_ptr, start_routine_ptr, arg_ptr );
+      }
+   #endif
+  
+   __SMACK_code( "call {:ASYNC} _spthread_ftn_wrapper( @, @, @); ",
+	 thread_ptr, start_routine_ptr, arg_ptr );
+
+   /* . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+      clean up and return
+    */
    _spthread_ctl_array_bounds_ptr_thm( thread_ptr );
    return 0;
 }}
@@ -205,11 +235,11 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
    */
 int spthread_join( spthread_t thread, void**retval )
 {{
-   __SMACK_assert( "thread->state == _SPTHREAD_STATE_RUNNING || " 
-	 "thread->state == _SPTHREAD_STATE_DONE" );
-   while( thread->state != _SPTHREAD_STATE_DONE  ) {
-      // do nothing
-   }
+   __SMACK_assert( (thread->state == _SPTHREAD_STATE_RUNNING) || 
+	 (thread_state == _SPTHREAD_STATE_DONE) );
+
+   __SMACK_assume( thread->state == _SPTHREAD_STATE_DONE );
+
    *retval= thread->ret_val;
    return 0;
 }}
