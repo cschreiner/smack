@@ -128,8 +128,8 @@ int spthread_create( spthread_t* thread_ptr,
       }
    #endif
   
-   __SMACK_code( "call {:ASYNC} _spthread_ftn_wrapper( " 
-	 "thread_ptr, start_routine_ptr, arg_ptr );" ); 
+   __SMACK_code( "call {:ASYNC} _spthread_ftn_wrapper( @, @, @); ",
+	 thread_ptr, start_routine_ptr, arg_ptr );
 
    return 0;
 }}
