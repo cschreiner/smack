@@ -4,14 +4,21 @@
 
 int printf_stub( char* st );
 
-
-#ifdef SMACK
+#if defined(SMACK)
    #error "SMACK is defined"
+#elif defined(_SMACK)
+   #error "_SMACK is defined"
+#elif defined(__SMACK)
+   #error "__SMACK is defined"
+#elif defined(_SMACK_)
+   #error "_SMACK_ is defined"
+#elif defined(__SMACK__)
+   #error "__SMACK__ is defined"
 #else
-   #error "SMACK is not defined"
+   #error "neither SMACK nor its variants are defined"
 #endif
 
-#error "silly message"
+#error "Verified that preprocessor errors work."
 
 int main( int argc, char* argv[] )
 {{
