@@ -77,6 +77,8 @@ code in __SMACK_decl*() functions that only makes sense with one backend.
 [ ] consider having smack rename the corral object-ish files created to begin
 with the unsuffixed basename of the source file.
 
+[ ] allow a -DMACRO=VALUE option on the smack-verify command line.
+
 
 (end of file)
 
