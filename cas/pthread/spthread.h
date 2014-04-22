@@ -36,7 +36,7 @@
 
 #include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h"
 
-#include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack_proof.h"
+#include "/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread_proof.h"
 
 /*** **************************************************************************
    *   declarations
@@ -237,8 +237,7 @@ int spthread_join( spthread_t thread, void**retval )
    *   header files for spthread subsystems
    * **************************************************************************
    */
-#include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack_mutex.h"
-
+#include "/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread_mutex.h"
 
 /*** **************************************************************************
    *   end of file
