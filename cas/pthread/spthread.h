@@ -198,12 +198,12 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
       int tmp= __SMACK_nondet();
       __SMACK_code( "assume @ == 0;", tmp );
       if ( tmp ) {
-	 _spthread_ftn_wrapper( thread_ptr, start_routine_ptr, arg_ptr );
+	 _spthread_ftn_wrapper( *thread_ptr, start_routine_ptr, arg_ptr );
       }
    #endif
   
    __SMACK_code( "call {:ASYNC} _spthread_ftn_wrapper( @, @, @); ",
-	 thread_ptr, start_routine_ptr, arg_ptr );
+	 *thread_ptr, start_routine_ptr, arg_ptr );
 
    /* . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
       clean up and return
@@ -236,7 +236,7 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
 int spthread_join( spthread_t thread, void**retval )
 {{
    __SMACK_assert( (thread->state == _SPTHREAD_STATE_RUNNING) || 
-	 (thread_state == _SPTHREAD_STATE_DONE) );
+	 (thread->state == _SPTHREAD_STATE_DONE) );
 
    __SMACK_assume( thread->state == _SPTHREAD_STATE_DONE );
 
