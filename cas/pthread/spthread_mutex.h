@@ -1,9 +1,9 @@
 /*** 
    * Program Name: SMACK spthreads
    *
-   * File Name: spthread.h
+   * File Name: spthread_mutex.h
    *
-   * File Description: 
+   * File Description: mutex locking structures for spthreads
    *
    * SMACK spthreads was written by Christian A. Schreiner at University of
    * Utah.  Copyright (C) 2014-2014 by University of Utah.  All rights
@@ -24,8 +24,8 @@
    * 
    */
 
-#if !defined(__SPTHREAD_H__)
-#define __SPTHREAD_H__
+#if !defined(__SPTHREAD_MUTEX_H__)
+#define __SPTHREAD_MUTEX_H__
 
 /*** **************************************************************************
    *   includes
@@ -34,57 +34,13 @@
 #include <stdlib.h>
 #include <errno.h>
 
-/*** **************************************************************************
-   *   stuff to add to smack.h or similar
-   * **************************************************************************
-   */
-#include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h"
+#include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack_proof.h"
 
 
 /*** **************************************************************************
    *   declarations
    * **************************************************************************
    */
-#if defined(_SPTHREAD_FAULT_TOLERANT_PROOFS)
-   #define _spthread_state_valid_assumption( aa )
-#else
-   #define _spthread_state_valid_assumption( aa ) \
-      __SMACK_assume( "(_SPTHREAD_STATE_FIRST < (" #aa ") ) && " \
-	    "( (" #aa ") < _SPTHREAD_STATE_LAST" );
-#endif
-
-#define _SPTHREAD_MAX_THREADS (10)
-
-typedef void* spthread_start_routine_t( void *arg_ptr);
-
-typedef enum { _SPTHREAD_STATE_FIRST= 0x8887, // random num 1...32767
-      _SPTHREAD_STATE_INITIALIZED, _SPTHREAD_STATE_RUNNING, 
-      _SPTHREAD_STATE_DONE,
-      _SPTHREAD_STATE_LAST } _spthread_state_t;
-
-typedef struct {
-   /* give this structure a dummy field until something is needed. */
-   char dummy;
-} spthread_attr_t;
-
-/* main control structure for a thread */
-typedef struct {
-   _spthread_state_t state;
-   spthread_attr_t attrs;
-   void* ret_val;
-} _spthread_ctl_t;
-
-typedef _spthread_ctl_t* spthread_t;
-
-_spthread_ctl_t _spthread_ctl_array[ _SPTHREAD_MAX_THREADS+ 1 ];
-/* Note: each element in this array should be initialized when
-   pthread_create() initializes it. 
-*/
-
-
-/* ..........................................................................
-   locking structures
-*/
 typedef enum { _SPTHREAD_MUTEX_TYPE_FIRST= 0x6B46, // random val 1...32768
       _SPTHREAD_MUTEX_TYPE_FAST,
       _SPTHREAD_MUTEX_TYPE_RECURSIVE,
@@ -112,13 +68,6 @@ spthread_mutex_attr_t SPTHREAD_ERRORCHECK_MUTEX_INITIALIZER_NP=
 typedef enum { _SPTHREAD_MUTEX_VAL_FIRST= -1, _SPTHREAD_MUTEX_VAL_UNLOCKED= 0,
       _SPTHREAD_MUTEX_VAL_LOCKED, _SPTHREAD_MUTEX_VAL_LAST } 
       _spthread_mutex_val_t;
-#if defined(_SPTHREAD_FAULT_TOLERANT_PROOFS)
-   #define _spthread_mutex_lock_valid_assumption(aa) /* intentionally nothing */
-#else
-   #define _spthread_mutex_lock_valid_assumption(aa)  \
-      __SMACK_assume( "(_SPTHREAD_MUTEX_FIRST < (" #aa ") ) && " \
-	    "( (" #aa ") < _SPTHREAD_MUTEX_LAST )" );
-#endif
 
 typedef struct {
    _spthread_mutex_val_t lock;
@@ -128,152 +77,6 @@ typedef struct {
 /*** ==========================================================================
    *   function prototypes
    */
-
-/*** --------------------------------------------------------------------------
-   * _spthread_set_attr_to_defaults()
-   * --------------------------------------------------------------------------
-   * Description: sets a spthread_attr_t instance to default values
-   *
-   * Method:
-   *
-   * Reentrancy:
-   *
-   * Inputs: none
-   * 
-   * Outputs:
-   *   *aa: the spthread_attr_t structure to set
-   *
-   * Return Value: void
-   *
-   */
-#define _spthread_set_attr_to_defaults( aa ) /* intentionally nothing */
-
-/*** --------------------------------------------------------------------------
-   * _spthread_ftn_wrapper()
-   * --------------------------------------------------------------------------
-   * Description: manages the thread's start function, and its return value. 
-   *	Runs as part of the started thread, not as part of the calling thread.
-   *
-   * Method:
-   *
-   * Reentrancy:
-   *
-   * Inputs:
-   *    thread_ptr: pointer to the thread structure to control the thread.
-   *	start_routine_ptr: pointer to the function that the thread should 
-   *		run first.  
-   *    arg_ptr: pointer to the single argument to pass to the start routine.
-   * 
-   * Outputs: none
-   *
-   * Return Value: void
-   *
-   */
-void _spthread_ftn_wrapper( spthread_t thread, 
-      spthread_start_routine_t* start_routine_ptr, void* arg_ptr )
-{{
-   thread->ret_val= (*start_routine_ptr)(arg_ptr);
-   thread->state= _SPTHREAD_STATE_DONE;
-   /* TODO2: find some way to move unused threads from state
-      _SPTHREAD_STATE_DONE back to _SPTHREAD_STATE_INITIALIZED so the control
-      structure can be reused.
-    */
-}}
-
-
-/*** --------------------------------------------------------------------------
-   * spthread_create()
-   * --------------------------------------------------------------------------
-   * Description: starts a new thread running
-   *
-   * Method:
-   *
-   * Reentrancy:
-   *
-   * Inputs:
-   *    thread_ptr: pointer to the thread structure to control the thread.
-   *    attr_ptr: pointer to a structure specifying attributes the thread 
-   *		should have.  If NULL, use default attributes.
-   *	start_routine_ptr: pointer to the function that the thread should 
-   *		run first.  
-   *    arg_ptr: pointer to the single argument to pass to the start routine.
-   *		
-   * 
-   * Outputs:
-   *
-   * Return Value:
-   *
-   */
-#define _spthread_ctl_array_bounds_ptr_thm( aa ) \
-      __SMACK_assert( "(&_spthread_ctl_arry[0] <= (" #aa ") ) && " \
-	 "( (" #aa ") <= _spthread_ctl_arry[_SPTHRAD_MAX_THREADS] )" );
-#define _spthread_ctl_array_bounds_idx_thm( aa )  \
-      __SMACK_assert( "(0 <= (" #aa ") ) && " \
-	 "( (" #aa ") ) <= _SPTHRAD_MAX_THREADS " );
-
-int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
-      spthread_start_routine_t* start_routine_ptr, void* arg_ptr )
-{{
-   /* find an unused thread control structure */
-   int ii;
-   for ( ii= 0; ii < _SPTHREAD_MAX_THREADS; ii++ ) {
-      if ( _spthread_ctl_array[ii].state!= _SPTHREAD_STATE_RUNNING ) {
-         goto found_ctl_struct;
-      }
-   }
-   // apparently no control structures are available
-   return EAGAIN;
-
-   found_ctl_struct:
-   _spthread_state_valid_assumption( _spthread_ctl_array[ii].state );
-
-   _spthread_ctl_array[ii].state= _SPTHREAD_STATE_RUNNING;
-   if ( attr_ptr == NULL ) {
-      _spthread_set_attr_to_defaults( &(_spthread_ctl_array[ii]->attrs) );
-   } else {
-      _spthread_ctl_array[ii].attrs= *attr_ptr;
-   }
-   *thread_ptr= &_spthread_ctl_array[ii];
-   /* TODO: double check the thread start code here */ 
-   __SMACK_code( "call {:ASYNC} _spthread_ftn_wrapper( " 
-	 "thread_ptr, start_routine_ptr, arg_ptr );" ); 
-
-   _spthread_ctl_array_bounds_ptr_thm( thread_ptr );
-   return 0;
-}}
-
-
-/*** --------------------------------------------------------------------------
-   * spthread_join()
-   * --------------------------------------------------------------------------
-   * Description: waits for the given thread to finish, then returns to resume 
-   *	execution of the calling thread.
-   *
-   * Method:
-   *
-   * Reentrancy:
-   *
-   * Inputs:
-   *   thread: the id of the thread to join
-   *   **retval: pointer to where to write the return value, which is itself 
-   *		a pointer to void.
-   * 
-   * Outputs:
-   *
-   * Return Value: 0 for success, or one of EDEADLK, EINVAL, ESRCH.
-   *
-   */
-int spthread_join( spthread_t thread, void**retval )
-{{
-   __SMACK_assert( "thread->state == _SPTHREAD_STATE_RUNNING || " 
-	 "thread->state == _SPTHREAD_STATE_DONE" );
-   while( thread->state != _SPTHREAD_STATE_DONE  ) {
-      // do nothing
-   }
-   *retval= thread->ret_val;
-   return 0;
-}}
-
 
 /*** --------------------------------------------------------------------------
    * spthread_mutex_init()
@@ -428,5 +231,5 @@ int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
    *   end of file
    * **************************************************************************
    */
-#endif /* !defined(__SPTHREAD_H__) */
+#endif /* !defined(__SPTHREAD_MUTEX_H__) */
 
