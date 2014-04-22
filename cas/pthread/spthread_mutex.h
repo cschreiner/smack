@@ -129,29 +129,16 @@ int spthread_mutex_init( spthread_mutex_t* mutex_ptr,
 int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 {{
    int retval= 0;
-   _spthread_mutex_val_t lock_status= _SPTHREAD_MUTEX_VAL_UNLOCKED;
-
-   _spthread_mutex_lock_valid_assumption( mutex_ptr->lock );
 
    __SMACK_top_decl( "procedure corral_atomic_begin();" );
    __SMACK_top_decl( "procedure corral_atomic_end();" );
 
-   retval= 0;
-
-   /* match the AcquireSpinLock() function in storm's locks.h:
-      mutex_ptr->lock corresponds to __resource("LOCK", SpinLock).
-      _SPTHREAD_MUTEX_VAL_UNLOCKED corresponds to UNLOCKED.
-      _SPTHREAD_MUTEX_VAL_LOCKED corresponds to storm_getThreadID() aka tid.
-    */
    __SMACK_code( "call corral_atomic_begin();" );
 
-   __SMACK_assume( mutex_ptr->lock == lock_status );
-   __SMACK_assert( _SPTHREAD_MUTEX_VAL_LOCKED != lock_status );
-   __SMACK_assume( lock_status == _SPTHREAD_MUTEX_VAL_UNLOCKED );
+   __SMACK_assume( mutex_ptr->lock == _SPTHREAD_MUTEX_VAL_UNLOCKED );
    mutex_ptr->lock= _SPTHREAD_MUTEX_VAL_LOCKED;
 
    __SMACK_code( "call corral_atomic_end();" );
-   /* end match */
 
    return retval;
 }}
@@ -179,29 +166,17 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
    */
 int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
 {{
-   _spthread_mutex_lock_valid_assumption( mutex_ptr->lock );
-   _spthread_mutex_val_t lock_status= _SPTHREAD_MUTEX_VAL_UNLOCKED;
+   int retval= 0;
 
    __SMACK_top_decl( "procedure corral_atomic_begin();" );
    __SMACK_top_decl( "procedure corral_atomic_end();" );
 
-   int retval= 0;
-
-   // TODO: make this match locks.h, including the ghost variable. 
-
-   /* match the ReleaseSpinLock() function in storm's locks.h:
-      mutex_ptr->lock corresponds to __resource("LOCK", SpinLock).
-      _SPTHREAD_MUTEX_VAL_UNLOCKED corresponds to UNLOCKED.
-      _SPTHREAD_MUTEX_VAL_LOCKED corresponds to storm_getThreadID() aka tid.
-    */
    __SMACK_code( "call corral_atomic_begin();" );
 
-   __SMACK_assume( mutex_ptr->lock == lock_status );
-   __SMACK_assert( lock_status == _SPTHREAD_MUTEX_VAL_LOCKED );
+   __SMACK_assume( mutex_ptr->lock == _SPTHREAD_MUTEX_VAL_LOCKED );
    mutex_ptr->lock= _SPTHREAD_MUTEX_VAL_UNLOCKED;
 
    __SMACK_code( "call corral_atomic_end();" );
-   /* end match */
 
    return retval;
 }}
