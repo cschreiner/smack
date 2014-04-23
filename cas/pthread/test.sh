@@ -30,6 +30,9 @@ function test_one_program()
       else 
 	 echo "  " \"$arg_program\" incorrrectly found no bugs. 
       fi
+   else
+      echo ERROR: do not understand expected output \"$arg_expected_result\".
+      exit -1
    fi
 
    return 0
