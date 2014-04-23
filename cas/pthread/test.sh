@@ -15,7 +15,7 @@ function test_one_program()
          -e "^Number of variables tracked: " \
          -e "^Total Time: .* s" \
          -e "^ *$" | \
-      grep -q ^
+      grep -qi ':.*fail' 
    status=$?
 
    if [ "$arg_expected_result" = "ok" ]; then
