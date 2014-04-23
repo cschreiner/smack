@@ -17,7 +17,7 @@ void *my_procedure(void *my_argument) {
 }
 
 void *another(void *my_argument) {
-  __SMACK_assert(x > 0);
+  __SMACK_assert(x > 0); // ERROR: but x was set to 0, so it can't exceed 0
   return 0;
 }
 
