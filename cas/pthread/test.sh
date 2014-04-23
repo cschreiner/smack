@@ -19,13 +19,13 @@ function test_one_program()
    status=$?
 
    if [ "$arg_expected_result" = "ok" ]; then
-      if [ -a $status -eq 1 ]; then
+      if [ $status -eq 1 ]; then
 	 echo "  " \"$arg_program\" corrrectly found no bugs. 
       else 
 	 echo "  " \"$arg_program\" incorrrectly found bugs. 
       fi
    elif [ "$arg_expected_result" = "bug" ]; then
-      if [ -a $status -eq 0 ]; then
+      if [ $status -eq 0 ]; then
 	 echo "  " \"$arg_program\" corrrectly found bugs. 
       else 
 	 echo "  " \"$arg_program\" incorrrectly found no bugs. 
