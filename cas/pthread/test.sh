@@ -20,15 +20,15 @@ function test_one_program()
 
    if [ "$arg_expected_result" = "ok" ]; then
       if [ $status -eq 1 ]; then
-	 echo "  " \"$arg_program\" corrrectly found no bugs. 
+	 echo "  " corrrectly found no bugs. 
       else 
-	 echo "  " \"$arg_program\" incorrrectly found bugs. 
+	 echo "  " OOPS.  Incorrrectly found bugs. 
       fi
    elif [ "$arg_expected_result" = "bug" ]; then
       if [ $status -eq 0 ]; then
-	 echo "  " \"$arg_program\" corrrectly found bugs. 
+	 echo "  " corrrectly found bugs. 
       else 
-	 echo "  " \"$arg_program\" incorrrectly found no bugs. 
+	 echo "  " OOPS.  Incorrrectly found no bugs. 
       fi
    else
       echo ERROR: do not understand expected output \"$arg_expected_result\".
