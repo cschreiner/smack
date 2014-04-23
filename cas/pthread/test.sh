@@ -1,12 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 # run a standard test suite on the spthread library.
 
-function test_one_program
+function test_one_program()
 {
    arg_program="$1"
    arg_expected_result="$2"
+   echo "running \"$arg_program\", expecting \"$expected_result\"".
 
-   test_one_program "$1" | grep -v -e "^Boogie verification time:" \
+   ./smack_for_pthreads "$1" | grep -v -e "^Boogie verification time:" \
          -e "^Time spent reading-writing programs: .* s" \
          -e "^Time spent checking a program .* s" \
          -e "^Time spent checking a path .* s" \
