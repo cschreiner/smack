@@ -39,6 +39,7 @@ function test_one_program()
 }
 
 test_one_program test1/test_all_spthread.c ok
+test_one_program test1/test_all_spthread_w_error.c bug
 test_one_program test1/test_z.c ok
 test_one_program test1/test_z_w_error.c bug
 
