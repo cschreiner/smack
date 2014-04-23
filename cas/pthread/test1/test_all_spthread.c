@@ -12,7 +12,7 @@ spthread_attr_t attrs;
 int x = 1;
 
 void *my_procedure(void *my_argument) {
-  x = 0;
+  x = 2;
   return 0;
 }
 
