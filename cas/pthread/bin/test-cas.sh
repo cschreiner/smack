@@ -9,7 +9,7 @@ function test_one_program()
 
    # was:
    #./smack_for_pthreads "$1" | \
-   ./smack-verify-cas --verifier corral --mem-impls "$1" | \
+   bin/smack-verify-cas --verifier corral --mem-impls "$1" | \
       grep -v -e "^Boogie verification time:" \
          -e "^Time spent reading-writing programs: .* s" \
          -e "^Time spent checking a program .* s" \
