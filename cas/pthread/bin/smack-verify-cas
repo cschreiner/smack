@@ -19,7 +19,7 @@ def generateSourceErrorTrace(boogieOutput, bpl):
 
   if not re.search('.*{:sourceloc \"(' + FILENAME + ')\", (\d+), (\d+)}.*',
                    bpl):
-#    print 'No debug info in bpl file.'
+    #print 'No debug info in bpl file.'
     return None
 
   sourceTrace = '\nSMACK verifier version ' + VERSION + '\n\n'
