@@ -159,7 +159,10 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
    /* . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
       allocate a control structure
     */
-   #if defined(SMACK)
+   #if defined(SMACK) || 1 // force this code to run for now ;;
+   /* TODO: find a way to make sure SMACK is defined when SMACK is running, so
+      this #if doesn't have to be forced.
+   */
       ii= __SMACK_nondet();
       __SMACK_assume( 0 <= ii && ii < _SPTHREAD_MAX_THREADS );
       __SMACK_assume( _spthread_ctl_array[ii].state != _SPTHREAD_STATE_RUNNING );
@@ -172,12 +175,14 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
       }
       // apparently no control structures are available
       return EAGAIN;
+
+      found_ctl_struct:
+      /* continue setting up the thread */
    #endif
 
    /* . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
       initialize the control structure
     */
-   found_ctl_struct:
    _spthread_state_valid_assumption( _spthread_ctl_array[ii].state );
 
    _spthread_ctl_array[ii].state= _SPTHREAD_STATE_RUNNING;
