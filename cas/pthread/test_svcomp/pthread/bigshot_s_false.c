@@ -12,11 +12,13 @@ char *v;
 void *thread1(void * arg)
 {
   v = malloc(sizeof(char) * 8);
+  return NULL;
 }
 
 void *thread2(void *arg)
 {
   if (v) strcpy(v, "Bigshot");
+  return NULL;
 }
 
 
