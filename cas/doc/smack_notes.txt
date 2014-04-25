@@ -51,6 +51,13 @@ iterations exceeds the loop unrolling threshold (often about 2), then Boogie
 and Smack act as if the program terminated at that loop.  Zvonimir sometimes
 summarizes this by saying, "The program effectively exits at the end of the
 loop."
+_
+Apparently a few years ago there was a proposal at Microsoft Research (where
+Boogie was created) to have Boogie warn when the program exits this way, but
+apparently so far no action was taken.
+_
+CAS: why not "assume false" (trivially underapproximate) the excess
+iterations, and continue the analysis?
 
 [ ] Smack does not handle bit vectors and bit operations very usefully.
   
