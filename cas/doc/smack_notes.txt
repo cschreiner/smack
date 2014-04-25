@@ -97,6 +97,10 @@ with the unsuffixed basename of the source file.
 
 [ ] allow a -DMACRO=VALUE option on the smack-verify command line.
 
+[ ] smack currently gives an error message from within smack.h on where an
+__SMACK_assert() failed.  It would be better if the error message indicated
+where the offenting assert is.  Would it help if __SMACK_assert() was
+implemented as a macro? 
 
 (end of file)
 
