@@ -42,6 +42,17 @@ For example, this `assert false` won't yield an error:
 	assert false;
 
 [ ] __SMACK_assume( xxx ) means "either xxx is true, or exit()".
+
+[ ] Smack mimics this feature of Boogie: if a loop runs for an indeterminate
+number of times, the loop index value is havoc'd, and both the case of
+continue-looping and end-looping are considered.  This is good.  However, if
+the loop executes for a known, fixed number of times, and the number of
+iterations exceeds the loop unrolling threshold (often about 2), then Boogie
+and Smack act as if the program terminated at that loop.  Zvonimir sometimes
+summarizes this by saying, "The program effectively exits at the end of the
+loop."
+
+[ ] Smack does not handle bit vectors and bit operations very usefully.
   
 
 Smack Desired Features
