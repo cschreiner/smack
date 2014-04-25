@@ -1,9 +1,8 @@
 #include <stdlib.h>
-#include <pthread.h>
+#include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h"
+#include "/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h"
 #include <string.h>
 
-void __VERIFIER_assert(int expression) { if (!expression) { ERROR: goto
-ERROR; }; return; }
 
 char *v;
 
@@ -20,14 +19,14 @@ void *thread2(void *arg)
 
 int main()
 {
-  pthread_t t1, t2;
+  spthread_t t1, t2;
 
-  pthread_create(&t1, 0, thread1, 0);
-  pthread_create(&t2, 0, thread2, 0);
-  pthread_join(t1, 0);
-  pthread_join(t2, 0);
+  spthread_create(&t1, 0, thread1, 0);
+  spthread_create(&t2, 0, thread2, 0);
+  spthread_join(t1, 0);
+  spthread_join(t2, 0);
 
-  __VERIFIER_assert(!v || v[0] == 'B');
+  __SMACK_assert(!v || v[0] == 'B');
 
   return 0;
 }
