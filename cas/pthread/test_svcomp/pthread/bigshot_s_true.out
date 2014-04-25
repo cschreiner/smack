@@ -1,0 +1,194 @@
+Single threaded program detected
+Verifying program while tracking: {assertsPassed}
+Program has a potential bug: False bug
+Verifying program while tracking: {assertsPassed, $M.0, $M.2}
+Program has a potential bug: True bug
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(12,1): error PF5001: This assertion can fail
+
+Execution trace:
+test_svcomp/pthread/bigshot_s_true.c(28,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(30,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(30,1): Trace: Thread=1  (CALL spthread_create)
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(154,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(155,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(166,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(166,1): Trace: Thread=1  (CALL __SMACK_nondet)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(28,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(29,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(30,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(166,1): Trace: Thread=1  (RETURN from __SMACK_nondet )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(166,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(167,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(167,1): Trace: Thread=1  (CALL __SMACK_assume)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(15,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(16,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(17,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(167,1): Trace: Thread=1  (RETURN from __SMACK_assume )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(168,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(168,1): Trace: Thread=1  (CALL __SMACK_assume)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(15,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(16,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(17,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(168,1): Trace: Thread=1  (RETURN from __SMACK_assume )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(186,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(186,1): Trace: Thread=1  (CALL __SMACK_assume)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(15,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(16,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(17,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(186,1): Trace: Thread=1  (RETURN from __SMACK_assume )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(188,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(189,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(191,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(194,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(203,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(203,1): Trace: Thread=1  (CALL __SMACK_nondet)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(28,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(29,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(30,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(203,1): Trace: Thread=1  (RETURN from __SMACK_nondet )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(203,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(204,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(205,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(210,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(210,1): Trace: Thread=1  (CALL _spthread_ftn_wrapper)
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(119,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(120,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(122,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(122,1): Trace: Thread=1  (CALL thread1)
+test_svcomp/pthread/bigshot_s_true.c(13,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(15,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(15,1): Trace: Thread=1  (CALL $malloc)
+test_svcomp/pthread/bigshot_s_true.c(15,1): Trace: Thread=1  (RETURN from $malloc )
+test_svcomp/pthread/bigshot_s_true.c(15,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(16,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(122,1): Trace: Thread=1  (RETURN from thread1 )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(122,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(123,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(128,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(210,1): Trace: Thread=1  (RETURN from _spthread_ftn_wrapper )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(216,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(216,1): Trace: Thread=1  (CALL __SMACK_assert)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(11,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(12,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(13,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(216,1): Trace: Thread=1  (RETURN from __SMACK_assert )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(217,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(30,1): Trace: Thread=1  (RETURN from spthread_create )
+test_svcomp/pthread/bigshot_s_true.c(31,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(31,1): Trace: Thread=1  (CALL spthread_join)
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(241,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(243,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(243,1): Trace: Thread=1  (CALL __SMACK_assert)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(11,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(12,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(13,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(243,1): Trace: Thread=1  (RETURN from __SMACK_assert )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(246,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(246,1): Trace: Thread=1  (CALL __SMACK_assume)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(15,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(16,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(17,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(246,1): Trace: Thread=1  (RETURN from __SMACK_assume )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(248,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(249,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(31,1): Trace: Thread=1  (RETURN from spthread_join )
+test_svcomp/pthread/bigshot_s_true.c(33,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(33,1): Trace: Thread=1  (CALL spthread_create)
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(154,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(155,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(166,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(166,1): Trace: Thread=1  (CALL __SMACK_nondet)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(28,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(29,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(30,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(166,1): Trace: Thread=1  (RETURN from __SMACK_nondet )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(166,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(167,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(167,1): Trace: Thread=1  (CALL __SMACK_assume)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(15,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(16,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(17,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(167,1): Trace: Thread=1  (RETURN from __SMACK_assume )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(168,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(168,1): Trace: Thread=1  (CALL __SMACK_assume)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(15,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(16,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(17,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(168,1): Trace: Thread=1  (RETURN from __SMACK_assume )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(186,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(186,1): Trace: Thread=1  (CALL __SMACK_assume)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(15,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(16,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(17,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(186,1): Trace: Thread=1  (RETURN from __SMACK_assume )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(188,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(189,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(191,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(194,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(203,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(203,1): Trace: Thread=1  (CALL __SMACK_nondet)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(28,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(29,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(30,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(203,1): Trace: Thread=1  (RETURN from __SMACK_nondet )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(203,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(204,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(205,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(210,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(210,1): Trace: Thread=1  (CALL _spthread_ftn_wrapper)
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(119,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(120,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(122,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(122,1): Trace: Thread=1  (CALL thread2)
+test_svcomp/pthread/bigshot_s_true.c(19,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(21,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(22,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(122,1): Trace: Thread=1  (RETURN from thread2 )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(122,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(123,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(128,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(210,1): Trace: Thread=1  (RETURN from _spthread_ftn_wrapper )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(216,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(216,1): Trace: Thread=1  (CALL __SMACK_assert)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(11,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(12,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(13,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(216,1): Trace: Thread=1  (RETURN from __SMACK_assert )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(217,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(33,1): Trace: Thread=1  (RETURN from spthread_create )
+test_svcomp/pthread/bigshot_s_true.c(34,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(34,1): Trace: Thread=1  (CALL spthread_join)
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(241,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(243,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(243,1): Trace: Thread=1  (CALL __SMACK_assert)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(11,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(12,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(13,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(243,1): Trace: Thread=1  (RETURN from __SMACK_assert )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(246,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(246,1): Trace: Thread=1  (CALL __SMACK_assume)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(15,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(16,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(17,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(246,1): Trace: Thread=1  (RETURN from __SMACK_assume )
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(248,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h(249,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(34,1): Trace: Thread=1  (RETURN from spthread_join )
+test_svcomp/pthread/bigshot_s_true.c(36,1): Trace: Thread=1  
+test_svcomp/pthread/bigshot_s_true.c(36,1): Trace: Thread=1  (CALL __SMACK_assert)
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(11,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(12,1): Trace: Thread=1  
+/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h(12,1): Trace: Thread=1  (ASSERTION FAILS)
+test_svcomp/pthread/bigshot_s_true.c(36,1): Trace: Thread=1  (RETURN from __SMACK_assert )
+test_svcomp/pthread/bigshot_s_true.c(36,1): Trace: Thread=1  (Done)
+
+Boogie verification time: 1.78 s
+Time spent reading-writing programs: 0.46 s
+
+Time spent checking a program (2): 0.81 s
+Time spent checking a path (4): 1.65 s
+
+Number of procedures inlined: 31
+Number of variables tracked: 3
+Total Time: 2.915002 s
+
