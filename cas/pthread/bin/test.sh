@@ -7,7 +7,7 @@ function test_one_program()
    arg_expected_result="$2"
    echo "running \"$arg_program\", expecting \"$arg_expected_result\"".
 
-   ./smack_for_pthreads "$1" | grep -v -e "^Boogie verification time:" \
+   bin/smack_for_pthreads "$1" | grep -v -e "^Boogie verification time:" \
          -e "^Time spent reading-writing programs: .* s" \
          -e "^Time spent checking a program .* s" \
          -e "^Time spent checking a path .* s" \
