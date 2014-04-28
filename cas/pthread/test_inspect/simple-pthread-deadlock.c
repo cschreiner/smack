@@ -18,6 +18,7 @@ void * thread_A(void* arg)
   if (A_count == 0) 
     spthread_mutex_unlock(&lock);
   spthread_mutex_unlock(&mutex);
+  return NULL;
 }
 
 
@@ -34,7 +35,7 @@ void * thread_B(void * arg)
   if (B_count == 0) 
     spthread_mutex_unlock(&lock);
   spthread_mutex_unlock(&mutex);
-
+  return NULL;
 }
 
 
@@ -45,7 +46,7 @@ int main()
   spthread_mutex_init(&mutex,NULL);
   spthread_mutex_init(&lock,NULL);
 
-  spthread_t a1, a2, b1, b2;
+  spthread_t a1, b1;
 
   spthread_create(&a1, NULL, thread_A, NULL);
   
