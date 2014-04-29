@@ -34,8 +34,8 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread_proof.h"
-
+#include <smack.h>
+#include <spthread_proof.h>
 
 /*** **************************************************************************
    *   declarations
