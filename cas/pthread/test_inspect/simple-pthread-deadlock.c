@@ -3,7 +3,7 @@
 
 spthread_mutex_t  mutex, lock;
 int A_count = 0, B_count = 0;
-int completion_flag= 0;
+int A_completion_flag, B_completion_flag= 0;
 
 
 void * thread_A(void* arg)
@@ -19,6 +19,8 @@ void * thread_A(void* arg)
   if (A_count == 0) 
     spthread_mutex_unlock(&lock);
   spthread_mutex_unlock(&mutex);
+
+  A_completion_flag= 1;
   return NULL;
 }
 
@@ -36,6 +38,8 @@ void * thread_B(void * arg)
   if (B_count == 0) 
     spthread_mutex_unlock(&lock);
   spthread_mutex_unlock(&mutex);
+
+  B_completion_flag= 1;
   return NULL;
 }
 
@@ -57,8 +61,8 @@ int main()
   spthread_join(b1, NULL);
 
   /* added by CAS to verify that the program reaches this point */
-  completion_flag= 1;
-  __SMACK_assert( completion_flag == 1 );
+  __SMACK_assert( A_completion_flag == 1 );
+  __SMACK_assert( B_completion_flag == 1 );
 
   return 0;
 }
