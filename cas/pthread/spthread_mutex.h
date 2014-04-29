@@ -135,6 +135,7 @@ int spthread_mutex_lock( spthread_mutex_t* mutex_ptr )
 
    __SMACK_code( "call corral_atomic_begin();" );
 
+   // this statement derived from an algorithm by Zvonimir:
    __SMACK_assume( mutex_ptr->lock == _SPTHREAD_MUTEX_VAL_UNLOCKED );
    mutex_ptr->lock= _SPTHREAD_MUTEX_VAL_LOCKED;
 
@@ -173,6 +174,7 @@ int spthread_mutex_unlock( spthread_mutex_t* mutex_ptr )
 
    __SMACK_code( "call corral_atomic_begin();" );
 
+   // this statement derived from an algorithm by Zvonimir:
    __SMACK_assume( mutex_ptr->lock == _SPTHREAD_MUTEX_VAL_LOCKED );
    mutex_ptr->lock= _SPTHREAD_MUTEX_VAL_UNLOCKED;
 
