@@ -1,5 +1,7 @@
-#include "../spthread.h"
 #include <stdio.h>
+
+#include <smack.h>
+#include <spthread.h>
 
 spthread_mutex_t mutex1, mutex2;
 int A_count = 0, B_count = 0;

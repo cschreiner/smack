@@ -2,10 +2,10 @@
  *   
  * tests _all_ of spthread.h's create capability.
  */
-
 #include <stdlib.h>
-#include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h"
-#include "/uusoc/scratch/euler/cas/edu/uut/smack/cas/pthread/spthread.h"
+
+#include <smack.h>
+#include <spthread.h>
 
 spthread_attr_t attrs;
 

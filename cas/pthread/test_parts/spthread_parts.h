@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <errno.h>
 
-#include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h"
+#include <smack.h>
 
 
 /*** **************************************************************************

@@ -9,9 +9,11 @@
 * LAST REVISED: 01/29/09  Blaise Barney
 ******************************************************************************/
 #error calls ftns not used in smack pthreads as of 2014apr28
-#include "../spthread.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#include <smack.h>
+#include <spthread.h>
 
 /* Define and scope what needs to be seen by everyone */
 #define NUM_THREADS  3

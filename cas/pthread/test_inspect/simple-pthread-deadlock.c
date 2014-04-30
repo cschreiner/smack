@@ -1,4 +1,5 @@
-#include "../spthread.h"
+#include <smack.h>
+#include <spthread.h>
 #include <stdio.h>
 
 spthread_mutex_t  mutex, lock;

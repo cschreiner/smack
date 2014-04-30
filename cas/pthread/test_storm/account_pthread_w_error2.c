@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../spthread.h"
+#include <smack.h>
+#include <spthread.h>
 
 #define TRUE 1
 #define FALSE 0

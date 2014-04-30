@@ -9,9 +9,11 @@
 * LAST REVISED: 01/29/09 Blaise Barney
 ******************************************************************************/
 #error calls functions not supported by smack pthreads as of 28apr2014.
-#include "../spthread.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#include <smack.h>
+#include <spthread.h>
 
 /* Define global data where everyone can see them */
 #define NUMTHRDS 8

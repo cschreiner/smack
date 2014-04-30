@@ -1,7 +1,9 @@
 #error calls functions not supported by smack pthreads as of 2014apr28.
-#include "../spthread.h"
 #include <stdio.h>
 #include <assert.h>
+
+#include <smack.h>
+#include <spthread.h>
 
 #define QUEUE_FULL_SIZE 1
 

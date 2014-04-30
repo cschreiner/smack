@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "/uusoc/scratch/euler/cas/tuut/x86_64/smack-project/smack/install/include/smack/smack.h"
+#include <smack.h>
 #include "spthread_parts.h"
 
 int x = 1;
