@@ -41,10 +41,12 @@
 typedef struct {
    char dummy;
 } FILE;
-FILE* stdin, stdout, stderr;
+FILE* stdin; 
+FILE* stdout; 
+FILE* stderr; 
 
 const int EOF= 0;
-const size_t L_tmpname= 32767; // TODO2: consider shortening this
+const size_t L_tmpnam= 32767; // TODO2: consider shortening this
 const size_t TMP_MAX= 1024;
 const size_t BUFSIZ= 32767; // TODO2: consider adjusting this
 const int _IOFBF= 30003;
@@ -74,6 +76,7 @@ void stetbuf( FILE* stream, char* buf );
 int fprintf( FILE* stream, const char* format, ... );
 int printf( const char* format, ... );
 int sprintf( char* ss, const char* format, ... );
+int snprintf(char* str, size_t size, const char* format, ...);
 
 #if 0 /* add when stdarg.h is available */
    vprintf( const char* format, va_list arg );
@@ -83,18 +86,18 @@ int sprintf( char* ss, const char* format, ... );
 
 int fscanf( FILE* stream, const char* format, ... );
 int scanf( const char* format, ... );
-int sscanf( char* ss, const char* format, ... );
+int sscanf( const char* ss, const char* format, ... );
 int fgetc( FILE* stream );
 char* fgets( char* ss, int nn, FILE* stream );
 int fputc( int cc, FILE* stream );
-nt fputs( const char* ss, FILE* stream );
+int fputs( const char* ss, FILE* stream );
 int getc( FILE* stream );
 int getchar( void );
 char* gets( char* ss );
 int putc( int cc, FILE* stream );
 int putchar( int cc )
 {{
-   int putc( cc, stdout );
+   return putc( cc, stdout );
 }}
 int puts( const char* ss );
 int ungetc( int cc, FILE* stream );
@@ -104,7 +107,7 @@ size_t fwrite( const void* ptr, size_t size, size_t nobj, FILE* stream );
 int fseek( FILE* stream, long offset, int origin );
 long ftell( FILE* stream );
 void rewind( FILE* stream );
-int fgetpos( FIEL* stream, fpos_t *ptr );
+int fgetpos( FILE* stream, fpos_t *ptr );
 int fsetpos( FILE* stream, const fpos_t* ptr );
 
 
