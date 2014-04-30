@@ -41,6 +41,8 @@
 
 typedef size_t int;
 
+#define RAND_MAX 32767 /* TODO2: consider upgrading for 32-bit code */
+
 enum __exit_e ( EXIT_SUCCESS, EXIT_FAILURE };
 
 typedef struct {
