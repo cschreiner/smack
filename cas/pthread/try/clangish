@@ -1,4 +1,11 @@
 #!/bin/sh
 
+# didn't work:
+# clang -I`pwd`/include/smack try/pthread_vs_spthread.c
+
+# didn't work:
+#clang -iquote -I`pwd`/include/smack try/pthread_vs_spthread.c
+
 clang -I`pwd`/include/smack try/pthread_vs_spthread.c
+
 
