@@ -50,9 +50,21 @@ def clang(scriptPathName, inputFile):
   fileName = path.splitext(inputFile.name)[0]
 
   print "smackHeader dir=\"" + smackHeaders+ "\"" #;;
-  
-  p = subprocess.Popen(['clang', '-c', '-Wall', '-emit-llvm', '-O0', '-g',
-    '-I' + smackHeaders, inputFile.name, '-nostdinc', '-D__SMACK=', 
+
+  # original form, using -nostdinc to inhibit loading conflicting standard
+  # header files:  
+  #p = subprocess.Popen(['clang', '-c', '-Wall', '-emit-llvm', '-O0', '-g',
+  #  '-I' + smackHeaders, inputFile.name, '-nostdinc', '-D__SMACK=', 
+  #  '-o', fileName + '.bc'])
+   
+  # an alternate means:
+  #p = subprocess.Popen(['clang', '-c', '-Wall', '-emit-llvm', '-O0', '-g',
+  #  '-I' + smackHeaders, inputFile.name, '-fno-builtin', '-D__SMACK=', 
+  #  '-o', fileName + '.bc'])
+   
+  # On 2014apr30, Zvonimir recommended this:
+  p = subprocess.Popen(['clang', '-c', '-emit-llvm', '-O0', 
+    '-I' + smackHeaders, inputFile.name, '-D__SMACK=', 
     '-o', fileName + '.bc'])
   p.wait()
 
