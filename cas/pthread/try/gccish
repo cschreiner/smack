@@ -1,5 +1,8 @@
 #!/bin/sh
 
-gcc -I`pwd`/include/smack try/pthread_vs_spthread.c
+# didn't work
+# gcc -I`pwd`/include/smack try/pthread_vs_spthread.c
+
+gcc -nostdinc -I`pwd`/include/smack try/pthread_vs_spthread.c
 
 
