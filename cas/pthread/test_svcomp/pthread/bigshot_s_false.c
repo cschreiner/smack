@@ -5,7 +5,7 @@
 #include <string.h>
 
 #include <smack.h>
-#include <spthread.h>
+#include <pthread.h>
 
 
 char *v;
@@ -25,13 +25,13 @@ void *thread2(void *arg)
 
 int main()
 {
-  spthread_t t1, t2;
+  pthread_t t1, t2;
 
-  spthread_create(&t1, 0, thread1, 0);
-  spthread_join(t1, 0);
+  pthread_create(&t1, 0, thread1, 0);
+  pthread_join(t1, 0);
 
-  spthread_create(&t2, 0, thread2, 0);
-  spthread_join(t2, 0);
+  pthread_create(&t2, 0, thread2, 0);
+  pthread_join(t2, 0);
 
   __SMACK_assert(v[0] == 'B');  // <---- wrong, malloc() can fail and therefore no strcpy!
 

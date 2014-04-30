@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <smack.h>
-#include "spthread_parts.h"
+#include "pthread_parts.h"
 
 int x = 1;
-spthread_t my_proc_thread_ctl, another_thread_ctl;
+pthread_t my_proc_thread_ctl, another_thread_ctl;
 
 void *my_procedure(void *my_argument) {
   x = 0;
@@ -16,8 +16,8 @@ void *another(void *my_argument) {
 }
 
 int main() {
-   spthread_create(&my_proc_thread_ctl, my_procedure, 0);
-   spthread_create(&another_thread_ctl, another, 0);
+   pthread_create(&my_proc_thread_ctl, my_procedure, 0);
+   pthread_create(&another_thread_ctl, another, 0);
    return 0;
 }
 

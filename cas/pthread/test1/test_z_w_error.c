@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <smack.h>
-#include <spthread.h>
+#include <pthread.h>
 
 int x = 1;
 
@@ -14,11 +14,11 @@ void *another(void *my_argument) {
   return 0;
 }
 
-spthread_t thread1_ctl, thread2_ctl;
+pthread_t thread1_ctl, thread2_ctl;
 
 int main() {
-   spthread_create(&thread1_ctl, NULL, my_procedure, 0);
-   spthread_create(&thread2_ctl, NULL, another, 0);
+   pthread_create(&thread1_ctl, NULL, my_procedure, 0);
+   pthread_create(&thread2_ctl, NULL, another, 0);
    return 0;
 }
 

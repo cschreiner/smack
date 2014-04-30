@@ -13,7 +13,7 @@
 #include <stdlib.h>
 
 #include <smack.h>
-#include <spthread.h>
+#include <pthread.h>
 
 /* Define and scope what needs to be seen by everyone */
 #define NUM_THREADS  3
@@ -21,8 +21,8 @@
 #define THRESHOLD 12
 int count = 0;
 double finalresult=0.0;
-spthread_mutex_t count_mutex;
-spthread_cond_t count_condvar;
+pthread_mutex_t count_mutex;
+pthread_cond_t count_condvar;
 
 
 void *sub1(void *t)
@@ -39,10 +39,10 @@ void *sub1(void *t)
   to prevent pthread_cond_wait from never returning, and that this thread's
   work is now done within the mutex lock of count.
   */
-  spthread_mutex_lock(&count_mutex);
+  pthread_mutex_lock(&count_mutex);
   if (count < THRESHOLD) {
     printf("sub1: thread=%ld going into wait. count=%d\n",tid,count);
-    spthread_cond_wait(&count_condvar, &count_mutex);
+    pthread_cond_wait(&count_condvar, &count_mutex);
     printf("sub1: thread=%ld Condition variable signal received.",tid);
     printf(" count=%d\n",count);
     /* do some work */
@@ -56,8 +56,8 @@ void *sub1(void *t)
     printf("sub1: count=%d. Not as expected.",count); 
     printf(" Probably missed signal. Skipping work and exiting.\n");
     }
-  spthread_mutex_unlock(&count_mutex);
-  spthread_exit(NULL);
+  pthread_mutex_unlock(&count_mutex);
+  pthread_exit(NULL);
 }
 
 void *sub2(void *t) 
@@ -69,7 +69,7 @@ void *sub2(void *t)
   for (i=0; i<ITERATIONS; i++) {
     for (j=0; j<100000; j++)
       myresult += sin(j) * tan(i);
-    spthread_mutex_lock(&count_mutex);
+    pthread_mutex_lock(&count_mutex);
     finalresult += myresult;
     count++;
     /* 
@@ -78,16 +78,16 @@ void *sub2(void *t)
     */
     if (count == THRESHOLD) {
       printf("sub2: thread=%ld Threshold reached. count=%d. ",tid,count);
-      spthread_cond_signal(&count_condvar);
+      pthread_cond_signal(&count_condvar);
       printf("Just sent signal.\n");
       }
     else {
       printf("sub2: thread=%ld did work. count=%d\n",tid,count);
       }
-    spthread_mutex_unlock(&count_mutex);
+    pthread_mutex_unlock(&count_mutex);
     }
     printf("sub2: thread=%ld  myresult=%e. Done. \n",tid,myresult);
-  spthread_exit(NULL);
+  pthread_exit(NULL);
 }
 
 
@@ -96,32 +96,32 @@ int main(int argc, char *argv[])
 {
   int i, rc; 
   long t1=1, t2=2, t3=3;
-  spthread_t threads[3];
-  spthread_attr_t attr;
+  pthread_t threads[3];
+  pthread_attr_t attr;
 
   /* Initialize mutex and condition variable objects */
-  spthread_mutex_init(&count_mutex, NULL);
-  spthread_cond_init (&count_condvar, NULL);
+  pthread_mutex_init(&count_mutex, NULL);
+  pthread_cond_init (&count_condvar, NULL);
 
   /* For portability, explicitly create threads in a joinable state */
-  spthread_attr_init(&attr);
-  spthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-  spthread_create(&threads[0], &attr, sub1, (void *)t1);
-  spthread_create(&threads[1], &attr, sub2, (void *)t2);
-  spthread_create(&threads[2], &attr, sub2, (void *)t3);
+  pthread_attr_init(&attr);
+  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+  pthread_create(&threads[0], &attr, sub1, (void *)t1);
+  pthread_create(&threads[1], &attr, sub2, (void *)t2);
+  pthread_create(&threads[2], &attr, sub2, (void *)t3);
 
   /* Wait for all threads to complete */
   for (i = 0; i < NUM_THREADS; i++) {
-    spthread_join(threads[i], NULL);
+    pthread_join(threads[i], NULL);
   }
   printf ("Main(): Waited on %d threads. Final result=%e. Done.\n",
           NUM_THREADS,finalresult);
 
   /* Clean up and exit */
-  spthread_attr_destroy(&attr);
-  spthread_mutex_destroy(&count_mutex);
-  spthread_cond_destroy(&count_condvar);
-  spthread_exit (NULL);
+  pthread_attr_destroy(&attr);
+  pthread_mutex_destroy(&count_mutex);
+  pthread_cond_destroy(&count_condvar);
+  pthread_exit (NULL);
 
 }
 

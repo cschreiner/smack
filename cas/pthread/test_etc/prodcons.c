@@ -3,7 +3,7 @@
 #include <assert.h>
 
 #include <smack.h>
-#include <spthread.h>
+#include <pthread.h>
 
 #define QUEUE_FULL_SIZE 1
 

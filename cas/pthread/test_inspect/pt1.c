@@ -13,7 +13,7 @@
 #include <stdlib.h>
 
 #include <smack.h>
-#include <spthread.h>
+#include <pthread.h>
 
 /* Define global data where everyone can see them */
 #define NUMTHRDS 8
@@ -40,7 +40,7 @@ void *dotprod(void *arg)
       sum += (a[i] * b[i]);
    printf("thread: %ld done. Global sum now is=%li\n",tid,sum);
 
-   spthread_exit((void*) 0);
+   pthread_exit((void*) 0);
 }
 
 
@@ -49,8 +49,8 @@ int main (int argc, char *argv[])
 {
 long i;
 void *status;
-spthread_t threads[NUMTHRDS];
-spthread_attr_t attr;
+pthread_t threads[NUMTHRDS];
+pthread_attr_t attr;
 
 /* Assign storage and initialize values */
 a = (int*) malloc (NUMTHRDS*VECLEN*sizeof(int));
@@ -63,21 +63,21 @@ for (i=0; i<VECLEN*NUMTHRDS; i++)
  * routine. Their offset into the global vectors is specified by passing
  * the "i" argument in pthread_create().
  */
-spthread_attr_init(&attr);
-spthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+pthread_attr_init(&attr);
+pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 for(i=0; i<NUMTHRDS; i++) 
-   spthread_create(&threads[i], &attr, dotprod, (void *)i); 
+   pthread_create(&threads[i], &attr, dotprod, (void *)i); 
 
-spthread_attr_destroy(&attr);
+pthread_attr_destroy(&attr);
 
 /* Wait on the threads for final result */
 for(i=0; i<NUMTHRDS; i++) 
-  spthread_join(threads[i], &status);
+  pthread_join(threads[i], &status);
 
 /* After joining, print out the results and cleanup */
 printf ("Final Global Sum=%li\n",sum);
 free (a);
 free (b);
-spthread_exit(NULL);
+pthread_exit(NULL);
 }   
 

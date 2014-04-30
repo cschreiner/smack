@@ -1,13 +1,13 @@
-/* test_all_spthread.c
+/* test_all_pthread.c
  *   
- * tests _all_ of spthread.h's create capability.
+ * tests _all_ of pthread.h's create capability.
  */
 #include <stdlib.h>
 
 #include <smack.h>
-#include <spthread.h>
+#include <pthread.h>
 
-spthread_attr_t attrs;
+pthread_attr_t attrs;
 
 int x = 1;
 
@@ -22,9 +22,9 @@ void *another(void *my_argument) {
 }
 
 int main() {
-   spthread_t my_procedures_thread_ctl, another_thread_ctl;
-   spthread_create( &my_procedures_thread_ctl, &attrs, my_procedure, 0);
-   spthread_create( &another_thread_ctl, &attrs, another, 0);
+   pthread_t my_procedures_thread_ctl, another_thread_ctl;
+   pthread_create( &my_procedures_thread_ctl, &attrs, my_procedure, 0);
+   pthread_create( &another_thread_ctl, &attrs, another, 0);
    return 0;
 }
 
