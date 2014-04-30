@@ -3,7 +3,7 @@
    *
    * File Name: stdlib.h
    *
-   * File Description: 
+   * File Description: replacement for the incompatible system stdlib.h
    *
    * SMACK pthreads was written by Christian A. Schreiner at University of
    * Utah.  Copyright (C) 2014-2014 by University of Utah.  All rights
@@ -37,9 +37,51 @@
    * **************************************************************************
    */
 
+#define NULL ((void*) 0)
+
+typedef size_t int;
+
+enum __exit_e ( EXIT_SUCCESS, EXIT_FAILURE };
+
+typedef struct {
+   int quot;
+   int rem;
+} div_t;
+typedef struct {
+   long quot;
+   long rem;
+} ldiv_t;
+
 /*** ==========================================================================
    *   function prototypes
    */
+
+double atof( const char* ss );
+int atoi( const char* ss);
+long atol(const char* ss);
+double strtod(const char* ss, char** endp );
+unsigned long strtoul( const char* s, char** endp, int base );
+int rand(void);
+void srand( unsigned int seed);
+voic* calloc( size_t nobj, sizt_t size );
+void* malloc( size_t size );
+void* realloc( void *p, size_t size );
+void free( void* pp );
+void abort(void);
+void exit( int status );
+int atexit( void(*ftn)(void) );
+int system( const char* ss );
+char* getenv( const char* name );
+void* bsearch( const void* key, const void* base,
+      size_t nn, size_t size,
+      int (*cmp)( const void* keyval, const void* datum) );
+void qsort( void *base, size_t nn, size_t size,
+      int (*cmp)( const void*, const void* ) );
+int abs( int nn );
+long labs( long nn);
+div_t div( int num, int denom );
+ldiv_t ldiv( long num, long denom );
+
 
 /*** **************************************************************************
    *   end of file
