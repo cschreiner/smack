@@ -52,7 +52,8 @@ def clang(scriptPathName, inputFile):
   print "smackHeader dir=\"" + smackHeaders+ "\"" #;;
   
   p = subprocess.Popen(['clang', '-c', '-Wall', '-emit-llvm', '-O0', '-g',
-    '-I' + smackHeaders, inputFile.name, '-D__SMACK=', '-o', fileName + '.bc'])
+    '-I' + smackHeaders, inputFile.name, '-nostdinc', '-D__SMACK=', 
+    '-o', fileName + '.bc'])
   p.wait()
 
   if p.returncode != 0:
