@@ -55,14 +55,14 @@ size_t strcspn( const char* aa, const char* bb );
 char* strpbrk( const char* aa, const char* bb );
 char* strstr( const char* aa, const char* bb );
 size_t strlen( const char *st );
-char* strerror( size_t nn );
+char* strerror( int nn );
 char* strtok( char* st, const char* aa );
 
 void* memcpy( void* dest, const void* src, size_t len );
 void* memmove( void* dest, const void* src, size_t len );
-int memcmp( const char* aa, const char* bb, size_t len );
-void* memchr( const char* st, int cc, size_t len );
-void* memset( char* dest, int cc, size_t len );
+int memcmp( const void* aa, const void* bb, size_t len );
+void* memchr( const void* st, int cc, size_t len );
+void* memset( void* dest, int cc, size_t len );
 
 
 /*** **************************************************************************
