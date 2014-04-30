@@ -39,11 +39,11 @@
 
 #define NULL ((void*) 0)
 
-typedef size_t int;
+typedef unsigned long size_t;
 
 #define RAND_MAX 32767 /* TODO2: consider upgrading for 32-bit code */
 
-enum __exit_e ( EXIT_SUCCESS, EXIT_FAILURE };
+enum __exit_e { EXIT_SUCCESS, EXIT_FAILURE };
 
 typedef struct {
    int quot;
@@ -65,7 +65,7 @@ double strtod(const char* ss, char** endp );
 unsigned long strtoul( const char* s, char** endp, int base );
 int rand(void);
 void srand( unsigned int seed);
-voic* calloc( size_t nobj, sizt_t size );
+void* calloc( size_t nobj, size_t size );
 void* malloc( size_t size );
 void* realloc( void *p, size_t size );
 void free( void* pp );
