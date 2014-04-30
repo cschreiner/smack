@@ -6,6 +6,8 @@
 # didn't work:
 #clang -iquote -I`pwd`/include/smack try/pthread_vs_spthread.c
 
-clang -nostdinc -I`pwd`/include/smack try/pthread_vs_spthread.c
+# clang says this is not needed: -nobuildininc
+clang -nostdinc -I`pwd`/include/smack -c \
+      try/pthread_vs_spthread.c
 
 
