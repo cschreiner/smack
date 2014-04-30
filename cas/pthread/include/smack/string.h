@@ -3,7 +3,7 @@
    *
    * File Name: string.h
    *
-   * File Description: 
+   * File Description: replacement for the ill-suited system file
    *
    * SMACK pthreads was written by Christian A. Schreiner at University of
    * Utah.  Copyright (C) 2014-2014 by University of Utah.  All rights
@@ -40,6 +40,29 @@
 /*** ==========================================================================
    *   function prototypes
    */
+
+char* strcpy( char* dest, const char* src );
+char *strncpy( char* dest, const char* src, size_t len );
+char* strct( char* dest, const char* src );
+char* strnct( char* dest, const char* src, size_t len );
+int strcmp( const char* aa, const char* bb );
+int strncmp( const char* aa, const char* bb, size_t len );
+char* strchr( const char* st, char c );
+char* strrchr( const char* st, char c );
+size_t strspn( const char* aa, const char* bb );
+size_t strcspn( const char* aa, const char* bb );
+char* strpbrk( const char* aa, const char* bb );
+char* strstr( const char* aa, const char* bb );
+size_t strlen( const char *st );
+char* strerror( size_t nn );
+char* strtok( char* st, const char* aa );
+
+void* memcpy( void* dest, const void* src, size_t len );
+void* memmove( void* dest, const void* src, size_t len );
+int memcmp( const char* aa, const char* bb, size_t len );
+void* memchr( const char* st, char cc, size_t len );
+void* memset( char* dest, char cc, size_t len );
+
 
 /*** **************************************************************************
    *   end of file
