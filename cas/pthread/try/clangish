@@ -6,6 +6,6 @@
 # didn't work:
 #clang -iquote -I`pwd`/include/smack try/pthread_vs_spthread.c
 
-clang -I`pwd`/include/smack try/pthread_vs_spthread.c
+clang -nostdinc -I`pwd`/include/smack try/pthread_vs_spthread.c
 
 
