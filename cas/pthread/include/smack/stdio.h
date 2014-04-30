@@ -31,15 +31,82 @@
    *   includes
    * **************************************************************************
    */
+#include <stdlib.h>
 
 /*** **************************************************************************
    *   declarations
    * **************************************************************************
    */
 
+typedef struct {
+   char dummy;
+} FILE;
+FILE* stdin, stdout, stderr;
+
+const int EOF= 0;
+const size_t L_tmpname= 32767; // TODO2: consider shortening this
+const size_t TMP_MAX= 1024;
+const size_t BUFSIZ= 32767; // TODO2: consider adjusting this
+const int _IOFBF= 30003;
+const int _IOLBF= 30004;
+const int _IONBF= 30005;
+
+const int SEEK_SET= 28290;
+const int SEEK_CUR= 28291;
+const int SEEK_END= 28292;
+
+typedef size_t fpos_t;
+
 /*** ==========================================================================
    *   function prototypes
    */
+
+FILE* fopen( const char* filename, const char* mode );
+FILE* freopen( const char* filename, const char* mode, FILE* stream );
+int fflush( FILE* stream );
+int fclose( FILE* stream );
+int remove( const char* filename );
+int rename( const char* oldname, const char* newname );
+FILE* tmpfile(void);
+char* tmpnam( char s[L_tmpnam]);
+int setvbuf( FILE* stream, char* buf, int mode, size_t size );
+void stetbuf( FILE* stream, char* buf );
+int fprintf( FILE* stream, const char* format, ... );
+int printf( const char* format, ... );
+int sprintf( char* ss, const char* format, ... );
+
+#if 0 /* add when stdarg.h is available */
+   vprintf( const char* format, va_list arg );
+   vfprintf( FILE* stream, const char* format, va_list arg );
+   vsprintf( char* ss, const char* format, va_list arg );
+#endif
+
+int fscanf( FILE* stream, const char* format, ... );
+int scanf( const char* format, ... );
+int sscanf( char* ss, const char* format, ... );
+int fgetc( FILE* stream );
+char* fgets( char* ss, int nn, FILE* stream );
+int fputc( int cc, FILE* stream );
+nt fputs( const char* ss, FILE* stream );
+int getc( FILE* stream );
+int getchar( void );
+char* gets( char* ss );
+int putc( int cc, FILE* stream );
+int putchar( int cc )
+{{
+   int putc( cc, stdout );
+}}
+int puts( const char* ss );
+int ungetc( int cc, FILE* stream );
+
+size_t fread( void* ptr, size_t size, size_t nobj, FILE* stream );
+size_t fwrite( const void* ptr, size_t size, size_t nobj, FILE* stream );
+int fseek( FILE* stream, long offset, int origin );
+long ftell( FILE* stream );
+void rewind( FILE* stream );
+int fgetpos( FIEL* stream, fpos_t *ptr );
+int fsetpos( FILE* stream, const fpos_t* ptr );
+
 
 /*** **************************************************************************
    *   end of file
