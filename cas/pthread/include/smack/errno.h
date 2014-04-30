@@ -45,7 +45,7 @@ int errno;
 /* define the various error values */
 enum errno_e {
    ERRNO_CONST_FIRST= 20509, /* number chosen at random */
-   EAGAIN, EINVAL, EPERM, EDEADLK, ESRCH,
+   EAGAIN, EINVAL, EPERM, EDEADLK, ESRCH, ERANGE,
    /* add more codes here as needed */
    ERRNO_CONST_LAST
 };
