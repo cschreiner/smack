@@ -31,6 +31,7 @@
    *   includes
    * **************************************************************************
    */
+#include <stdlib.h>
 
 /*** **************************************************************************
    *   declarations
@@ -47,8 +48,8 @@ char* strct( char* dest, const char* src );
 char* strnct( char* dest, const char* src, size_t len );
 int strcmp( const char* aa, const char* bb );
 int strncmp( const char* aa, const char* bb, size_t len );
-char* strchr( const char* st, char c );
-char* strrchr( const char* st, char c );
+char* strchr( const char* st, int c );
+char* strrchr( const char* st, int c );
 size_t strspn( const char* aa, const char* bb );
 size_t strcspn( const char* aa, const char* bb );
 char* strpbrk( const char* aa, const char* bb );
@@ -60,8 +61,8 @@ char* strtok( char* st, const char* aa );
 void* memcpy( void* dest, const void* src, size_t len );
 void* memmove( void* dest, const void* src, size_t len );
 int memcmp( const char* aa, const char* bb, size_t len );
-void* memchr( const char* st, char cc, size_t len );
-void* memset( char* dest, char cc, size_t len );
+void* memchr( const char* st, int cc, size_t len );
+void* memset( char* dest, int cc, size_t len );
 
 
 /*** **************************************************************************
