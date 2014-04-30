@@ -158,7 +158,7 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
    /* . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
       allocate a control structure
     */
-   #if defined(SMACK) || 1 // force this code to run for now ;;
+   #if defined(__SMACK) 
    /* TODO: find a way to make sure SMACK is defined when SMACK is running, so
       this #if doesn't have to be forced.
    */
@@ -167,6 +167,9 @@ int spthread_create( spthread_t* thread_ptr, const spthread_attr_t* attr_ptr,
       __SMACK_assume( _spthread_ctl_array[ii].state != _SPTHREAD_STATE_RUNNING );
    #else
       /* find an unused thread control structure */
+      /* CAS TODO2: consider malloc()'ing the control structure instead 
+	 of using this array.
+      */
       for ( ii= 0; ii < _SPTHREAD_MAX_THREADS; ii++ ) {
 	 if ( _spthread_ctl_array[ii].state!= _SPTHREAD_STATE_RUNNING ) {
 	    goto found_ctl_struct;
