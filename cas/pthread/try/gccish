@@ -1,0 +1,5 @@
+#!/bin/sh
+
+gcc -I`pwd`/include/smack try/pthread_vs_spthread.c
+
+
