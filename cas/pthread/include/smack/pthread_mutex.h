@@ -72,7 +72,6 @@ typedef enum { _PTHREAD_MUTEX_VAL_FIRST= -1, _PTHREAD_MUTEX_VAL_UNLOCKED= 0,
 typedef struct {
    _pthread_mutex_val_t lock;
 } pthread_mutex_t;
-#error just processed typedef struct for pthread_mutex_t //;;
 
 /*** ==========================================================================
    *   function prototypes
