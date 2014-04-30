@@ -37,7 +37,11 @@
    * **************************************************************************
    */
 
-typedef unsigned char _Bool;
+// why didn't these work?
+// typedef unsigned char _Bool;
+// typedef char _Bool;
+// Apparently _Bool is a compiler-builtin type.
+
 #define bool _Bool
 #define true 1
 #define false 0
