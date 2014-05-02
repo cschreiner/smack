@@ -45,8 +45,17 @@ int errno;
 /* define the various error values */
 enum errno_e {
    ERRNO_CONST_FIRST= 20509, /* number chosen at random */
-   EAGAIN, EINVAL, EPERM, EDEADLK, ESRCH, ERANGE,
-   /* add more codes here as needed */
+   /* these codes are listed alphabetically for human readability: */
+   /*EA*/ EAGAIN, 
+   /*EB*/ EBUSY, 
+   /*ED*/ EDEADLK, 
+   /*EI*/ EINTR, EINVAL, 
+   /*EN*/ ENOMEM, ENOTRECOVERABLE, 
+   /*EO*/ EOWNERDEAD, 
+   /*EP*/ EPERM, 
+   /*ER*/ ERANGE, 
+   /*ES*/ ESRCH, 
+   /* add more codes above as needed */
    ERRNO_CONST_LAST
 };
 
