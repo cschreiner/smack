@@ -3,7 +3,9 @@
    *
    * File Name: smack_svcomp.h
    *
-   * File Description: 
+   * File Description: definitions required for the Software Verification 
+   *	Competition (SVCOMP) test cases.  See this URL for details:
+   *	http://sv-comp.sosy-lab.org/2014/rules.php
    *
    * SMACK pthreads was written by Christian A. Schreiner at University of
    * Utah.  Copyright (C) 2014-2014 by University of Utah.  All rights
