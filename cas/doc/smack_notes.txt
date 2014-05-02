@@ -65,35 +65,38 @@ iterations, and continue the analysis?
 Smack Desired Features
 ----------------------
 
-[ ] add feature that when smack invokes clang, it automatically adds the
-appropriate include dir via an -I option so that smack.h can be included as
-#include <smack.h> without additional installation-specific dirs being
+[withdrawn] add feature that when smack invokes clang, it automatically adds
+the appropriate include dir via an -I option so that smack.h can be included
+as #include <smack.h> without additional installation-specific dirs being
 specified.  It would be acceptable if this needed to be #include
 <smack/smack.h> so one -I option could also cover the additional .h files in
 the smack installations include tree.  Changes appear to be necessary in
 bin/smackgen.py (call to subprocess.Popen()).  Note that a similar change has
 already been made in rise4fun/smack_server.py (call to subprocess.call()).
+_
+CAS: this feature turns out to already exist.
 
-[ ] updated build-linux.sh so it can handle prerequisite systems like corral or
-mono being pre-installed on the system, but still need to have symbolic links
-pointing to them.  Akin to what I have in TUUT.
+[needs-merge] updated build-linux.sh so it can handle prerequisite systems
+like corral or mono being pre-installed on the system, but still need to have
+symbolic links pointing to them.  Akin to what I have in TUUT.
 
 [ ] foreach .py file in smack/bin, have a symbolic link pointing to it without
 the .py suffix, to save on typing.  For example, a link called foo pointing to
 foo.py.
 
-[ ] direct SMACK statements for atomic_begin() and atomic_end().  They can
+[ ] have direct SMACK statements for atomic_begin() and atomic_end().  They can
 be implemented differently depending on the back end.
 
-[ ] have a preprocessor symbol #define __SMACK (used to #if out code used
-only for verification).
+[needs-merge] have a preprocessor symbol #define __SMACK (used to #if out code
+used only for verification).
 
 [ ] have a preprocessor symbol specifying which backend SMACK is using, e.g.
 #define __SMACK_BACKEND_CORRAL or __SMACK_BACKEND_BOOGIE.  Used to qualify
 code in __SMACK_decl*() functions that only makes sense with one backend.
 
 [ ] consider having smack rename the corral object-ish files created to begin
-with the unsuffixed basename of the source file.
+with the unsuffixed basename of the source file, instead of always calling
+them a.bpl.
 
 [ ] allow a -DMACRO=VALUE option on the smack-verify command line.
 
@@ -101,6 +104,11 @@ with the unsuffixed basename of the source file.
 __SMACK_assert() failed.  It would be better if the error message indicated
 where the offenting assert is.  Would it help if __SMACK_assert() was
 implemented as a macro? 
+
+[ ] smack detects when the code contains corral_atomic_begin() and/or
+corral_atomic_end(), and if present, automatically inserts the appropriate
+headers at the top of the intermediate boogie file.  This avoids the need to
+use __SMACK_top_decl() for standard Smack functions.
 
 (end of file)
 
