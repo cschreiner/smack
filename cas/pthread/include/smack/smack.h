@@ -81,6 +81,9 @@ int __SMACK_nondet() {
    * Description: begins (ends) an block of atomic code i.e. code that may
    *	not be interrupted by task swaps.
    *
+   *    A non-deterministic value is sometimes useful to help verify that a
+   *    property holds for any legal value.
+   *
    * Method: 
    *
    * Reentrancy: yes, these are safe to use in a reentrant environment.
@@ -95,7 +98,154 @@ int __SMACK_nondet() {
 #define __SMACK_atomic_begin() __SMACK_code( "call corral_atomic_begin();" )
 #define __SMACK_atomic_end() __SMACK_code( "call corral_atomic_end();" )
 
-/* templatle is 17 lines long */
+/*** --------------------------------------------------------------------------
+   * function __SMACK_nondet_X()
+   * --------------------------------------------------------------------------
+   * Description: returns a nondeterministic value of type X.  
+   *	Supported types are:
+   *	bool, char, int, float, loff_t, long, pchar, pointer, pthread_t, 
+   *	sector_t, short, size_t, u32, uchar, uint, ulong, unsigned, ushort.
+   *
+   * Method: 
+   *
+   * Reentrancy: 
+   *
+   * Inputs: none
+   * 
+   * Outputs: none
+   *
+   * Return Value: a non-deterministic value of the type X.
+   *
+   */
+// template is 7 lines long:
+//X __SMACK_nondet_X()
+//{{
+//  static X AAA;
+//  X zz = AAA;
+//  __SMACK_code("havoc @;", zz);
+//  return zz;
+//}}
+int __SMACK_nondet_bool()
+{{
+  static bool AAA;
+  bool zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+char __SMACK_nondet_char()
+{{
+  static char AAA;
+  char zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+int __SMACK_nondet_int()
+{{
+  static int AAA;
+  int zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+float __SMACK_nondet_float()
+{{
+  static float AAA;
+  float zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+loff_t __SMACK_nondet_loff_t()
+{{
+  static loff_t AAA;
+  loff_t zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+long __SMACK_nondet_long()
+{{
+  static long AAA;
+  long zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+pchar __SMACK_nondet_long()
+{{
+  static long AAA;
+  long zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+void* __SMACK_nondet_pointer()
+{{
+  static void* AAA;
+  void* zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+sector_t __SMACK_nondet_sector_t()
+{{
+  static sector_t AAA;
+  sector_t zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+short __SMACK_nondet_short()
+{{
+  static short AAA;
+  short zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+size_t __SMACK_nondet_size_t()
+{{
+  static size_t AAA;
+  size_t zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+u32 __SMACK_nondet_u32()
+{{
+  static u32 AAA;
+  u32 zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+unsigned char __SMACK_nondet_uchar()
+{{
+  static unsigned char AAA;
+  unsigned char zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+unsigned int __SMACK_nondet_uint()
+{{
+  static unsigned int AAA;
+  unsigned int zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+unsigned long __SMACK_nondet_ulong()
+{{
+  static unsigned long AAA;
+  unsigned long zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+unsigned __SMACK_nondet_unsigned()
+{{
+  static unsigned AAA;
+  unsigned zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+unsigned short __SMACK_nondet_ushort()
+{{
+  static unsigned short AAA;
+  unsigned short zz = AAA;
+  __SMACK_code("havoc @;", zz);
+  return zz;
+}}
+
+
 /*** --------------------------------------------------------------------------
    * function name()
    * --------------------------------------------------------------------------
@@ -112,5 +262,25 @@ int __SMACK_nondet() {
    * Return Value: 
    *
    */
+//void name()
+
+/* template is 17 lines long */
+/*** --------------------------------------------------------------------------
+   * function name()
+   * --------------------------------------------------------------------------
+   * Description: 
+   *
+   * Method: 
+   *
+   * Reentrancy: 
+   *
+   * Inputs: 
+   * 
+   * Outputs: 
+   *
+   * Return Value: 
+   *
+   */
+//void name()
 
 #endif /*SMACK_H_*/
