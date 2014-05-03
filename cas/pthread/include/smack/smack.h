@@ -2,6 +2,7 @@
 #define SMACK_H_
 
 #include <stdbool.h>
+#include <stdlib.h>
 
 void __SMACK_code(const char *fmt, ...);
 void __SMACK_mod(const char *fmt, ...);
@@ -22,6 +23,24 @@ void __SMACK_assume(bool v) {
 //   __SMACK_top_decl("procedure boogie_si_record_int(i:int);");
 //   __SMACK_code("call boogie_si_record_int(@);", i);
 // }
+
+/*** **************************************************************************
+   *   type definitions ideally defined by our C compiler 
+   * **************************************************************************
+   */
+/* per definitions in some SV Comp '14 code */
+typedef unsigned long sector_t;
+
+/* per http://cboard.cprogramming.com/cplusplus-programming/97972-how-convert-string-into-pchar.html */
+typedef char* pchar;
+
+/* per definitions in some SV Comp '14 code */
+typedef unsigned int u32;
+
+/*** **************************************************************************
+   *   function prototypes & macros
+   * **************************************************************************
+   */
 
 /*** --------------------------------------------------------------------------
    * function __SMACK_nondet()
@@ -168,10 +187,10 @@ long __SMACK_nondet_long()
   __SMACK_code("havoc @;", zz);
   return zz;
 }}
-pchar __SMACK_nondet_long()
+pchar __SMACK_nondet_pchar()
 {{
-  static long AAA;
-  long zz = AAA;
+  static pchar AAA;
+  pchar zz = AAA;
   __SMACK_code("havoc @;", zz);
   return zz;
 }}
