@@ -130,6 +130,7 @@ int __SMACK_nondet_bool()
   static bool AAA;
   bool zz = AAA;
   __SMACK_code("havoc @;", zz);
+  __SMACK_assume( (zz==0) || (zz==1) );
   return zz;
 }}
 char __SMACK_nondet_char()
