@@ -169,14 +169,24 @@ int __SMACK_nondet_int()
   __SMACK_code("havoc @;", zz);
   return zz;
 }}
-// Why does this cause a smack to emit a weird error message?
-//;; float __SMACK_nondet_float()
-//;; {{
-//;;   static float AAA;
-//;;   float zz = AAA;
-//;;   __SMACK_code("havoc @;", zz);
-//;;   return zz;
-//;; }}
+
+#if 0 
+   /* This generates a very wierd smack error message.  I assume this is
+      related to the fact that boogie and corral don't support floating point,
+      though the error message would certainly do better to say that clearly.
+      TODO2: either add floating point capability, or clarify the error
+      message.
+   */
+
+   float __SMACK_nondet_float()
+   {{
+     static float AAA;
+     float zz = AAA;
+     __SMACK_code("havoc @;", zz);
+     return zz;
+   }}
+#endif
+
 loff_t __SMACK_nondet_loff_t()
 {{
   static loff_t AAA;
