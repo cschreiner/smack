@@ -37,6 +37,9 @@ typedef char* pchar;
 /* per definitions in some SV Comp '14 code */
 typedef unsigned int u32;
 
+/* per definitions in some SV Comp '14 code */
+typedef long long loff_t;
+
 /*** **************************************************************************
    *   function prototypes & macros
    * **************************************************************************
@@ -166,13 +169,14 @@ int __SMACK_nondet_int()
   __SMACK_code("havoc @;", zz);
   return zz;
 }}
-float __SMACK_nondet_float()
-{{
-  static float AAA;
-  float zz = AAA;
-  __SMACK_code("havoc @;", zz);
-  return zz;
-}}
+// Why does this cause a smack to emit a weird error message?
+//;; float __SMACK_nondet_float()
+//;; {{
+//;;   static float AAA;
+//;;   float zz = AAA;
+//;;   __SMACK_code("havoc @;", zz);
+//;;   return zz;
+//;; }}
 loff_t __SMACK_nondet_loff_t()
 {{
   static loff_t AAA;
