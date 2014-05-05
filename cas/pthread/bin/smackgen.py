@@ -64,11 +64,19 @@ def clang(scriptPathName, inputFile):
    
   # On 2014apr30, Zvonimir recommended this:
   p = subprocess.Popen(['clang', '-c', '-emit-llvm', '-O0', 
-    '-I' + smackHeaders, inputFile.name, '-D__SMACK=', 
-    #;; TODO: only insert this option iff an appropriate command-line option
-    # was given to this script, like 'include <file>' or '--sv-comp'.
-    '-include', 'smack_svcomp.h',
-    '-o', fileName + '.bc'])
+      '-I' + smackHeaders, inputFile.name, '-D__SMACK=', 
+
+      # TODO: only insert these options iff an appropriate command-line
+      #option was given to this script, like 'include <file>' or '--sv-comp'.
+      '-include', 'smack_svcomp.h', #;;
+      
+      # This option suppresses the no-return-statement error messages from the
+      # raw sv-comp task .c files that don't have return statements at the end
+      # of functions.  Unfortunately, this also suppresses enough information
+      # in the clang output that smack can't find an assertion failure.
+      #'-Wno-return-type',
+                        
+      '-o', fileName + '.bc'])
   p.wait()
 
   if p.returncode != 0:
