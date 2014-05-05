@@ -65,6 +65,9 @@ def clang(scriptPathName, inputFile):
   # On 2014apr30, Zvonimir recommended this:
   p = subprocess.Popen(['clang', '-c', '-emit-llvm', '-O0', 
     '-I' + smackHeaders, inputFile.name, '-D__SMACK=', 
+    #;; TODO: only insert this option iff an appropriate command-line option
+    # was given to this script, like 'include <file>' or '--sv-comp'.
+    '-include', 'smack_svcomp.h',
     '-o', fileName + '.bc'])
   p.wait()
 
