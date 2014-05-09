@@ -173,11 +173,10 @@ int __SMACK_nondet_int()
 #if 0 
    /* This generates a very wierd smack error message.  I assume this is
       related to the fact that boogie and corral don't support floating point,
-      though the error message would certainly do better to say that clearly.
-      TODO2: either add floating point capability, or clarify the error
-      message.
+      though it would certainly be nice if the error message said that
+      clearly.  TODO2: either add floating point capability, or clarify the
+      error message.
    */
-
    float __SMACK_nondet_float()
    {{
      static float AAA;
